@@ -3,7 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'; 
 import 'bootstrap/dist/js/bootstrap.bundle.min';
-import {Account, Accounterror, ApiResponsedepartment, Department, getApiLevel, getApiUserType, Level, Login, Loginerror, UserType} from './Services/Objects';
+import {Account, Accounterror, ApiResponsedepartment, Department, getApiLevel,getApiUserType,Level,Login,Loginerror,UserType} from './Services/Objects';
 import { api } from './Services/api';
 
 function App() {
@@ -18,7 +18,7 @@ function App() {
   const[account,setAccount]=useState<Account>({fullname:'',department:'',usertype:'',email:'',password:'',tel:'',classes:'',studentnumber:''});
   const[erraccount,setErroraccount]=useState<Accounterror>()
   const[passc,setPassc]=useState('');
-    
+  const[respo,setRespo]=useState();  
   
   const validateAccount=()=>{
     const phoneRegex = /^(\+250|0)(7[2-9]\d{7})$/;
@@ -88,7 +88,7 @@ useEffect(() => {
           "/departments" // replace with your API URL
         );
         setDepartment(response.data.results); // set API array to state
-        console.log(departments);
+       // console.log(departments);
       } catch (err) {
        // setError("Failed to fetch departments");
       } finally {
@@ -118,7 +118,7 @@ useEffect(() => {
           "/levels" // replace with your API URL
         );
          setLevel(response.data.levels);//set API array to state
-         console.log(levels);
+         //console.log(levels);
       } catch (err) {
        // setError("Failed to fetch departments");
       } finally {
@@ -130,7 +130,7 @@ useEffect(() => {
     fetchUsertype();
   }, []);
      
-   console.log(departments);
+  // console.log(departments);
 
   return (
     <div className="container">
@@ -148,8 +148,8 @@ useEffect(() => {
                            if(validate()){
                             setLoading(true)
                              api.post("/login",logindata).
-                             then((data)=>console.log(data.data.message)).
-                             catch(err=>console.log(err)).finally(()=>setLoading(false));
+                             then((data)=>setRespo(data.data.message)).
+                             catch(err=>setRespo(err.message)).finally(()=>setLoading(false));
                              setLoading(false)
                             }
                          
@@ -158,7 +158,7 @@ useEffect(() => {
                                 <label  className="form-label">
                                 StudentNumber
                                     </label>
-                                <input type="text" value={logindata.studentnumber} onChange={(e)=>setLogindata((prev)=>({...prev,studentnumber:e.target.value}))} className="form-control" id="username" placeholder="Enter username"/>
+                                <input type="text" value={logindata.studentnumber} onChange={(e)=>setLogindata((prev)=>({...prev,studentnumber:e.target.value}))} className="form-control" id="username" placeholder="Enter Student number"/>
                                 {errorl?.errornumber&& (
                                  <span className="text-danger text-sm">{errorl.errornumber}</span>
                                 )}
@@ -180,10 +180,10 @@ useEffect(() => {
                                   <span className="sr-only"></span>
                                   </>
                                    )
-                                    }
-
-                                      Sign-in</button>
+                                  }
+                               Sign-in</button>
                             </div>
+                            {respo &&<span className="text-danger text-sm">{respo}</span>}
                             <div className="d-flex justify-content-between">
                                 <a onClick={()=>setLogin(false)} className="btn btn-outline-secondary">Sign-up</a>
                                 <button type="reset" className="btn btn-outline-danger">Reset</button>
@@ -210,8 +210,8 @@ useEffect(() => {
 
                              if (validateAccount()) {
                                 api.post("/createaccount",account).
-                             then((data)=>console.log(data.data.message)).
-                             catch(err=>console.log(err)).finally(()=>setLoading(false));
+                             then((data)=>setRespo(data.data.message)).
+                             catch(err=>setRespo(err.response.data.sqlMessage)).finally(()=>setLoading(false));
                              setLoading(false)
                              }
                              
@@ -315,16 +315,19 @@ useEffect(() => {
                             <div className="d-flex justify-content-between mt-2">
                                 <button type="submit" className="btn btn-primary w-50 ml-2">Save</button>
                                 <a onClick={()=>setLogin(true)} className="btn btn-outline-secondary w-50 mx-3">Sign-in</a>
+
                             </div>
+                            <div className='d-flex justify-content-center'>
+                              {respo &&<span className="text-danger text-center text-sm py-1">{respo}</span>}
+                            </div>
+                            
                         </form>
                     </div>
                 </div>
             </div>
         </div>
       )
-
        }
-        
     </div>
   );
 }
