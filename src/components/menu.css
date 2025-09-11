@@ -1,0 +1,11 @@
+.nav-link.active {
+  background-color: #fff!important;       /* highlight color */
+  color: #0d6efd !important;    /* primary text */
+  border-left: 4px solid #0d6efd!important;
+}
+.topbar-color{
+    background-color: #abadb1!important;
+}
+.buttonbar-color{
+    background-color: #3b3e43!important;
+}
