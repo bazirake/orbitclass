@@ -68,6 +68,15 @@ export interface UserType {
    results:Department[];
 }
 
+ export interface MenuItem {
+  id: number;
+  label: string;
+  href: string;
+  icon: string;
+  usertype: string;
+}
+
+
 
 
            

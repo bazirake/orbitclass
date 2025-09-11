@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import { api } from '../Services/api';
 import { Login, Loginerror, Department, UserType, Level, Account, Accounterror, ApiResponsedepartment, getApiUserType, getApiLevel } from '../Services/Objects';
+import { useNavigate } from 'react-router-dom';
 
 function Loginc() {
 const [islogin,setLogin]=useState(true);
@@ -16,7 +17,11 @@ const [islogin,setLogin]=useState(true);
   const[passc,setPassc]=useState('');
   const[respo,setRespo]=useState();
   const[relogin,setLogrespo]=useState();
+   const Navi=useNavigate();
   
+   if (respo=='Login successful') {
+    Navi("main/Dashboard");
+   }
   const validateAccount=()=>{
     const phoneRegex = /^(\+250|0)(7[2-9]\d{7})$/;
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;

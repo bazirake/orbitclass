@@ -11,16 +11,15 @@ interface SidebarItem {
 }
 
 interface LayoutProps {
-  sidebarItems: SidebarItem[];
+  sidebarItems:SidebarItem[];
   children:ReactNode;
 }
 
-const Layout: React.FC<LayoutProps> = ({sidebarItems,children }) => {
+const Layout: React.FC<LayoutProps> = ({sidebarItems,children}) => {
   const [collapsed, setCollapsed] = useState(false);
-
   return (
     <div className="d-flex flex-column vh-100">
-      {/* Topbar */}
+           {/*Topbar*/}
       <nav className="navbar navbar-expand-lg navbar-dark topbar-color">
         <div className="container-fluid">
           <button
@@ -33,8 +32,8 @@ const Layout: React.FC<LayoutProps> = ({sidebarItems,children }) => {
             KDU-OrbitClass
           </a>
           <div className="d-flex ms-auto text-white">
-            <span className="me-3">Peter</span>
-            <i className="bi bi-person-circle"></i>
+             <span className="me-3">Peter</span>
+             <i className="bi bi-person-circle"></i>
           </div>
         </div>
       </nav>
@@ -68,10 +67,9 @@ const Layout: React.FC<LayoutProps> = ({sidebarItems,children }) => {
         {/* Content */}
         <div className="flex-grow-1 d-flex flex-column">
           <main className="flex-grow-1 p-4">{children}</main>
-
            {/* Footer */}
           <footer className="buttonbar-color text-light text-center py-3">
-            &copy; {new Date().getFullYear()} KDU-OrbitClass.All rights reserved.
+            &copy;{new Date().getFullYear()} KDU-OrbitClass.All rights reserved.
           </footer>
         </div>
       </div>
