@@ -16,6 +16,7 @@ import StudentInfo from './components/StudentInfo';
 import Quiz from './components/Quiz';
 import Viewcourse from './components/Viewcourse';
 import Course from './components/Course';
+import Settings from './components/Settings';
 function App() {
 
 const router=createBrowserRouter([
@@ -70,6 +71,10 @@ const router=createBrowserRouter([
         {
          path:'course',
          element:<Course/>
+        },
+         {
+         path:'setting',
+         element:<Settings/>
         }
        ]
       }

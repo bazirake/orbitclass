@@ -5,11 +5,11 @@ import { Login, Loginerror, Department, UserType, Level, Account, Accounterror, 
 import { useNavigate } from 'react-router-dom';
 
 function Loginc() {
-const [islogin,setLogin]=useState(true);
-  const [logindata,setLogindata]=useState<Login>({studentnumber:'',password:''})
-  const [errorl,setErrorLogin]=useState<Loginerror>()
-  const [isLoading,setLoading]=useState(false);
-  const [departments,setDepartment]=useState<Department[]>([]);
+  const[islogin,setLogin]=useState(true);
+  const[logindata,setLogindata]=useState<Login>({studentnumber:'',password:''})
+  const[errorl,setErrorLogin]=useState<Loginerror>()
+  const[isLoading,setLoading]=useState(false);
+  const[departments,setDepartment]=useState<Department[]>([]);
   const[usersty,setUsertype]=useState<UserType[]>([]);
   const[levels,setLevel]=useState<Level[]>([]);
   const[account,setAccount]=useState<Account>({fullname:'',department:'',usertype:'',email:'',password:'',tel:'',classes:'',studentnumber:''});
@@ -17,9 +17,9 @@ const [islogin,setLogin]=useState(true);
   const[passc,setPassc]=useState('');
   const[respo,setRespo]=useState();
   const[relogin,setLogrespo]=useState();
-   const Navi=useNavigate();
+  const Navi=useNavigate();
   
-   if (respo=='Login successful') {
+   if (respo=='Logged in successfully') {
     Navi("main/Dashboard");
    }
   const validateAccount=()=>{
@@ -142,21 +142,31 @@ useEffect(() => {
                <div className="col-md-6 col-lg-4">
                    <div className="card shadow">
                        <div className="card-body text-center">
-                         
                            <img src="https://global.kduniv.ac.kr/global/_Img/logo.gif" alt="Logo" className="mb-4"/>
                            <h3 className="card-title mb-4">Sign-in</h3>
                            <form onSubmit={(e)=>{
                               e.preventDefault()
                               if(validate()){
-                               setLoading(true)
+                                setLoading(true)
                                 api.post("/login",logindata).
-                                then((data)=>setRespo(data.data.message)).
+                                then((data)=>
+                                {
+                                
+                                const{message,user}=data.data;
+                                const loginsession={message,user};
+                                localStorage.clear();
+                                localStorage.setItem('auth',JSON.stringify(loginsession));
+                                //alert('hello');
+                               // console.log(loginsession);
+                                setRespo(data.data.message);
+                                }
+                                
+                                ).
                                 catch(err=>setRespo(err.message)).finally(()=>setLoading(false));
                                 setLoading(false)
-                               }
-                            
-                           }}>
-                               <div className="mb-3">
+                         }
+                        }}>
+                          <div className="mb-3">
                                    <label  className="form-label">
                                    StudentNumber
                                        </label>
@@ -164,7 +174,7 @@ useEffect(() => {
                                    {errorl?.errornumber&& (
                                     <span className="text-danger text-sm">{errorl.errornumber}</span>
                                    )}
-                               </div>
+                          </div>
                                <div className="mb-3">
                                    <label className="form-label">Password</label>
                                    <input type="password" value={logindata.password} onChange={(e)=>setLogindata((prev)=>({...prev,password:e.target.value}))} className="form-control" id="password" placeholder="Enter password"/>

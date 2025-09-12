@@ -1,8 +1,9 @@
 import React, { ReactNode, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import "../components/menu.css"
+import { api } from '../Services/api';
 
 interface SidebarItem {
    label:string;
@@ -15,8 +16,17 @@ interface LayoutProps {
   children:ReactNode;
 }
 
+
+
 const Layout: React.FC<LayoutProps> = ({sidebarItems,children}) => {
   const [collapsed, setCollapsed] = useState(false);
+  const navi=useNavigate();
+  const userinfo = JSON.parse(localStorage.getItem('auth')!);
+
+  const logout=async ()=>{
+  const respo=await api.post("api/logout").then(()=>{navi("/"); localStorage.clear()})
+}
+
   return (
     <div className="d-flex flex-column vh-100">
            {/*Topbar*/}
@@ -31,10 +41,35 @@ const Layout: React.FC<LayoutProps> = ({sidebarItems,children}) => {
           <a className="navbar-brand" href="#">
             KDU-OrbitClass
           </a>
-          <div className="d-flex ms-auto text-white">
-             <span className="me-3">Peter</span>
-             <i className="bi bi-person-circle"></i>
-          </div>
+          <div className="dropdown ms-auto">
+  <button
+    className="btn dropdown-toggle d-flex align-items-center"
+    type="button"
+    id="userMenuButton"
+    data-bs-toggle="dropdown"
+    aria-expanded="false"
+  >
+    <span className="me-2 border rounded px-1" style={{color:'white'}}>{userinfo.user.levels}</span>
+    <span className="me-2 border rounded px-1" style={{color:'white'}}>{userinfo.user.type_name}</span>
+    <span className="me-2 border rounded px-1" style={{color:'white'}}>{userinfo.user.department_name}</span>
+    <span className="me-2 border rounded px-1" style={{color:'white'}}>{userinfo.user.fullname}</span>
+    <i className="bi bi-person-circle"></i>
+  </button>
+
+  <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="userMenuButton">
+    <li>
+      <Link className="dropdown-item" to="setting">
+        <i className="bi bi-gear me-2"></i> Settings
+      </Link>
+    </li>
+    <li><hr className="dropdown-divider" /></li>
+    <li>
+      <button className="dropdown-item"  onClick={logout}>
+        <i className="bi bi-box-arrow-right me-2"></i> Logout
+      </button>
+    </li>
+  </ul>
+</div>
         </div>
       </nav>
 

@@ -76,6 +76,10 @@ export interface UserType {
   usertype: string;
 }
 
+ export interface getMenueItem{
+  results:MenuItem[]
+}
+
 
 
 

@@ -1,31 +1,33 @@
 import React, { useEffect, useState } from 'react'
 import Layout from './Layout';
 import { Outlet } from 'react-router-dom';
-import { MenuItem } from '../Services/Objects';
+import {  getMenueItem, MenuItem } from '../Services/Objects';
 import { api } from '../Services/api';
 
 function Main() {
     const [menues,setMenue]=useState<MenuItem[]>([]);
 
     useEffect(()=>{
-
-         const fetchMenue = async () => {
+         const fetchMenue = async() =>{
               //etIsLoading(true);
               try {
-                const response = await api.get<MenuItem[]>(
-                  "/api/menus?usertype=student" // replace with your API URL
+                const response = await api.get<getMenueItem>(
+                  "/api/menus?usertype=Lecturer"//replace with your API URL
                 );
-                setMenue(response.data); // set API array to state
-               // console.log(departments);
+               //console.log("hello" ,response.data)
+              //  alert('hello')
+                setMenue(response.data.results); // set API array to state
+                console.log(response.data);
               } catch (err) {
                // setError("Failed to fetch departments");
               } finally {
                 //setIsLoading(false);
               }
             };
-            fetchMenue();
+        fetchMenue();
     },[]);
 
+    //console.log(menues);
 //    const sidebarItems = [
 //     { label:'Dashboard',href:'Dashboard',icon:'bi bi-house text-danger'},
 //     { label:'Chat', href: 'chat',icon:'bi bi-speedometer2 text-danger'},
