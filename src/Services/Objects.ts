@@ -64,10 +64,23 @@ export interface UserType {
   created_at: string; // ISO date string
 }
 
+  export interface Departments {
+     department_id: number;
+     department_name: string;
+     created_at: string; // or Date if you’ll convert it
+     level_id: number;
+     level_name: string;
+    description: string;
+     deptid: number;
+   }
+
  export interface ApiResponsedepartment {
    results:Department[];
 }
 
+export interface ApiResponsedepartments {
+   results:Departments[];
+}
  export interface MenuItem {
   id: number;
   label: string;

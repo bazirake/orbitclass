@@ -330,7 +330,7 @@ useEffect(() => {
    
                                </div>
                                <div className='d-flex justify-content-center'>
-                                 {relogin &&<span className="text-danger text-center text-sm py-1">{relogin}</span>}
+                                 {respo &&<span className="text-danger text-center text-sm py-1">{respo}</span>}
                                </div>
                                
                            </form>

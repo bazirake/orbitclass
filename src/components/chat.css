@@ -1,0 +1,117 @@
+ .chat-panel {
+      max-width: 600px;
+      margin: 20px auto;
+      border: 1px solid #dee2e6;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .chat-header {
+      background-color: #f8f9fa;
+      padding: 15px;
+      border-bottom: 1px solid #dee2e6;
+      position: relative;
+    }
+    .chat-body {
+      height: 400px;
+      overflow-y: auto;
+      padding: 15px;
+      background-color: #fff;
+    }
+    .chat-message {
+      margin-bottom: 15px;
+      display: flex;
+      align-items: flex-end;
+    }
+    .message-meta {
+      margin-bottom: 2px;
+      font-size: 0.8em;
+      color: #6c757d;
+    }
+    .message-bubble {
+      display: inline-block;
+      padding: 10px 15px;
+      border-radius: 15px;
+      max-width: 70%;
+      position: relative;
+    }
+    .message-time {
+      font-size: 0.75em;
+      color: #adb5bd;
+      margin-left: 5px;
+    }
+    .chat-message.sent {
+      justify-content: flex-end;
+    }
+    .chat-message.sent .message-bubble {
+      background-color: #007bff;
+      color: white;
+    }
+    .chat-message.received {
+      justify-content: flex-start;
+    }
+    .chat-message.received .message-bubble {
+      background-color: #e9ecef;
+      color: black;
+    }
+    .chat-message.new .message-bubble {
+      position: relative;
+      border: 2px solid #28a745; /* Green border for new messages */
+    }
+    .message-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 5px;
+      font-size: 1.2em;
+    }
+    .sent .message-icon {
+      background-color: #007bff;
+      color: white;
+    }
+    .received .message-icon {
+      background-color: #e9ecef;
+      color: #6c757d;
+    }
+    .chat-footer {
+      padding: 10px;
+      background-color: #f8f9fa;
+      border-top: 1px solid #dee2e6;
+    }
+    .chat-body::-webkit-scrollbar {
+      width: 8px;
+    }
+    .chat-body::-webkit-scrollbar-thumb {
+      background-color: #adb5bd;
+      border-radius: 10px;
+    }
+    .badge-unread {
+      position: absolute;
+      top: 10px;
+
+      right: 15px;
+    }
+
+       .badge-unread {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+    }
+    .room-list {
+      margin-bottom: 10px;
+    }
+    .room-list .list-group-item {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
+    .room-list .list-group-item.active {
+      background-color: #007bff;
+      color: white;
+      border-color: #007bff;
+    }
+    .room-list .list-group-item i {
+      margin-right: 10px;
+    }

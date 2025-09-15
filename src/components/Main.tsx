@@ -6,13 +6,16 @@ import { api } from '../Services/api';
 
 function Main() {
     const [menues,setMenue]=useState<MenuItem[]>([]);
+    const userinfo = JSON.parse(localStorage.getItem('auth')!);
 
     useEffect(()=>{
          const fetchMenue = async() =>{
               //etIsLoading(true);
               try {
+                
+               // alert(userinfo.type_name)
                 const response = await api.get<getMenueItem>(
-                  "/api/menus?usertype=Lecturer"//replace with your API URL
+                  `/api/menus?usertype=${userinfo.user.type_name}`//replace with your API URL
                 );
                //console.log("hello" ,response.data)
               //  alert('hello')
@@ -27,19 +30,6 @@ function Main() {
         fetchMenue();
     },[]);
 
-    //console.log(menues);
-//    const sidebarItems = [
-//     { label:'Dashboard',href:'Dashboard',icon:'bi bi-house text-danger'},
-//     { label:'Chat', href: 'chat',icon:'bi bi-speedometer2 text-danger'},
-//     { label:'Course', href:'course',icon:'bi bi-table text-danger'},
-//     { label:'Assessment', href:'assess',icon:'bi bi-grid text-danger'},
-//     { label:'Timetable', href:'timetable',icon:'bi bi-calendar text-danger'},
-//     { label:'Notify', href:'notify',icon:'bi bi-bell text-warning'},
-//     { label:'Reports', href:'report',icon:'bi bi-backpack4 text-danger'},
-//     { label:'Studentinfo', href:'sinfo',icon:'bi bi-info-circle-fill text-danger'},
-//     { label:'Viewassign/quiz', href:'quiz',icon:'bi bi-people text-danger'},
-//     { label:'Viewcourse', href:'view',icon:'bi bi-calendar text-danger',usertype:'admin'},
-//   ];
 
  return(
      <Layout sidebarItems={menues}>     
