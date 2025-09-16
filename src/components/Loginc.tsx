@@ -213,7 +213,7 @@ useEffect(() => {
                        <div className="card-body">
                            <div className='text-center'>
                                   <img src="https://global.kduniv.ac.kr/global/_Img/logo.gif" alt="Logo" className="mb-4"/>
-                           <h4 className="card-title mb-2">Create account</h4>
+                           <h4 className="card-title mb-2">Create accountggg</h4>
                            </div>
                         
                            <form onSubmit={(e)=>{
