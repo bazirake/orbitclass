@@ -9,7 +9,7 @@ function Loginc() {
   const[logindata,setLogindata]=useState<Login>({studentnumber:'',password:''})
   const[errorl,setErrorLogin]=useState<Loginerror>()
   const[isLoading,setLoading]=useState(false);
-  const[departments,setDepartment]=useState<Department[]>([]);
+  const[departments,setDepartment]=useState<Department[]>([]); 
   const[usersty,setUsertype]=useState<UserType[]>([]);
   const[levels,setLevel]=useState<Level[]>([]);
   const[account,setAccount]=useState<Account>({fullname:'',department:'',usertype:'',email:'',password:'',tel:'',classes:'',studentnumber:''});
