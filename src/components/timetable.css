@@ -1,0 +1,29 @@
+   .timetable th, .timetable td {
+            text-align: center;
+            vertical-align: middle;
+            min-width: 100px;
+         
+        }
+        .timetable th {
+            background-color: #f8f9fa;
+        }
+        .timetable td {
+            height: 60px;
+        }
+        .event {
+            border: 1px solid #b8daff;
+            border-radius: 5px;
+            padding: 5px;
+        }
+        .Mathematics { background-color: #e7f3ff; }
+        .English { background-color: #ffe7e7; }
+        .Science { background-color: #e7ffe7; }
+        .Physics { background-color: #f3e7ff; }
+        .Computer-Science { background-color: #fff3e7; }
+        .History { background-color: #f0f0f0; }
+        @media (max-width: 768px) {
+            .timetable th, .timetable td {
+                min-width: 70px;
+                font-size: 0.85rem;
+            }
+        }

@@ -59,16 +59,16 @@ function Loginc() {
     if (!phoneRegex.test(account.tel)) {
         error.tel="Invalid phone number format";
     }
-    if(!emailRegex.test(account.email)) {
+    if(!emailRegex.test(account.email)){
         error.tel="Invalid Email  format";
     }
     setErroraccount(error)
     return Object.keys(error).length==0
-  }
+   }
 
   const validate=()=>{
   const errordata:Loginerror={}
-   if((logindata.studentnumber=='' ||logindata.studentnumber==null)) {
+    if((logindata.studentnumber=='' ||logindata.studentnumber==null)) {
       errordata.errornumber="Please Enter Student number"
     }
     if(logindata.password=='' ||logindata.password=="") {
@@ -213,7 +213,7 @@ useEffect(() => {
                        <div className="card-body">
                            <div className='text-center'>
                                   <img src="https://global.kduniv.ac.kr/global/_Img/logo.gif" alt="Logo" className="mb-4"/>
-                           <h4 className="card-title mb-2">Create accountggg</h4>
+                           <h4 className="card-title mb-2">Create account</h4>
                            </div>
                         
                            <form onSubmit={(e)=>{
@@ -222,8 +222,9 @@ useEffect(() => {
    
                                 if (validateAccount()) {
                                    api.post("/createaccount",account).
-                                then((data)=>setRespo(data.data.message)).
-                                catch(err=>setLogrespo(err.response.data.sqlMessage)).finally(()=>setLoading(false));
+                                then((data)=>setLogrespo(data.data.message)).
+                                catch(err=>
+                                  setLogrespo(err.response.data.sqlMessage)).finally(()=>setLoading(false));
                                 setLoading(false)
                                 }
                                 
@@ -330,9 +331,12 @@ useEffect(() => {
    
                                </div>
                                <div className='d-flex justify-content-center'>
-                                 {respo &&<span className="text-danger text-center text-sm py-1">{respo}</span>}
+                                 {relogin && (
+                                       <span className="text-danger text-center text-sm py-1">{relogin}</span>
+                                 )}
+
+                              
                                </div>
-                               
                            </form>
                        </div>
                    </div>

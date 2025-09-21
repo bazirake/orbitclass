@@ -10,32 +10,46 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import StudentInfo from './StudentInfo';
 import { ApiResponsedepartment, ApiResponsedepartments, Department, Departments } from '../Services/Objects';
 import { api } from '../Services/api';
+import { data } from 'react-router-dom';
+import Course from './Course';
   const socket = io("http://localhost:3001");
   function Chat(){
   
-  const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState<any[]>([]);
-  const storedAuth = localStorage.getItem('auth');
-   const userinfo = storedAuth ? JSON.parse(storedAuth) : null;
+  const [message,setMessage] = useState('');
+  const [messages,setMessages] = useState<any[]>([]);
+  const storedAuth=localStorage.getItem('auth');
+   const userinfo=storedAuth ? JSON.parse(storedAuth) : null;
   // const userinfo = JSON.parse(localStorage.getItem('auth')!);
    const[departments,setDepartment]=useState<Department[]>([]);
    const[departmentss,setDepartments]=useState<Departments[]>([]);
    const[onedept,setoneDepartment]=useState<Departments>();
    const [activeDept, setActiveDept] = useState(0);
-  const [myid,setMyid]=useState('')
+   const [rooms,setRoom]=useState('');
+  const [myid,setMyid]=useState('');
+  const [file, setFile] = useState(null);
+ // const [myids,setMyids]=useState('')
     socket.on("connect", () => {
     console.log("you have connected to server");
     socket.on("myid",(id:string)=>{
       
-      const socketid=localStorage.getItem("socketid")!;
-    setMyid(socketid)
-    localStorage.setItem("socketid",id)
-    console.log("received fdsdsds",id)
+    //const socketid=localStorage.getItem("socketid")!;
+    setMyid(id)
+  
+    // Store the new one
+    //sessionStorage.setItem('socketid', id);
+    //localStorage.setItem("socketid",id)
+     //console.log("received fdsdsds",id)
+    // const socketid=sessionStorage.getItem("socketid")!;
+     //const socketids=sessionStorage.getItem("socketid")!;
+    // setMyids(socketids);
+     console.log("real time",id);
+     console.log(myid)
      })
   });
 
   useEffect(()=>{
      socket.on("sendback", (msg:any) => {
+    console.log("hello bacend");
      const newMsg = { id: msg.id, conte:msg.conte};
      setMessages((prev)=>[...prev,msg]);//push correctly
      console.log('hh',msg)
@@ -46,6 +60,7 @@ fetchDepartments()
  },[socket])
   
    const fetchOneDepartments = async (id:any) => {
+    //alert(id);
        //etIsLoading(true);
        try{
          const response = await api.get<Departments>(
@@ -53,10 +68,14 @@ fetchDepartments()
          );
          console.log(response.data)
          const roomnumber=`${response.data.department_id}${response.data.level_id}`;
-        // alert(response.data.department_id)
-         localStorage.setItem("room",roomnumber)
+         setRoom(roomnumber);
+         //alert(response.data.department_id)
+         //setRoom(roomnumber)
+         //sessionStorage.removeItem("room")
+         //sessionStorage.setItem("room",roomnumber)
+         //const socketid=sessionStorage.getItem("room")!;
          setoneDepartment(response.data);//set API array to state
-         console.log(roomnumber);
+         //console.log(socketid);
        } catch (err){
         // setError("Failed to fetch departments");
        } finally {
@@ -78,11 +97,27 @@ fetchDepartments()
          //setIsLoading(false);
        }
      }
-      const createRoom =(roo:any)=>{
-            if(!roo.trim()) return;
-              socket.emit("createRoom",roo);
+      const createRoom =(roo:string)=>{
+         //  alert(roo)
+           // if(!roo.trim()) return;
+             socket.emit("createRoom",roo);
+             socket.on("checking",(data:any)=>{
+                   console.log("checking",data)
+               })
               //setRoomName("");
           };
+   
+
+// Handle file selection
+ const handleFileUpload = (event:any) => {
+    const selectedFile = event.target.files[0]; // Get the first file (single file upload)
+    if (selectedFile) {
+      setFile(selectedFile.name);
+      
+      console.log('Selected file:', selectedFile.name);
+    }
+  };
+
   return(
    <div className='container'>
    <div className='row'>
@@ -98,12 +133,16 @@ fetchDepartments()
             activeDept ===index ? "active" : ""
           }`}
           onClick={() =>{setActiveDept(index);fetchOneDepartments(item.level_id);
-              const getroom=localStorage.getItem("room")!;
-              if(!getroom || !getroom.trim()) return;
-              createRoom(getroom)
+               //const getroom=localStorage.getItem("room")!;
+              /// if(!getroom || !getroom.trim()) return;
+             //alert(my)
+            // alert('helo')
+           // const socketid=sessionStorage.getItem("room")!;
+              setMessages([])
+              createRoom(rooms)
                //alert(getroom)
           }}
-          style={{ cursor:"pointer"}}
+          style={{cursor:"pointer"}}
         >
           <i className="bi bi-book-fill me-2"></i>
           <div className='d-flex flex-column'>
@@ -138,19 +177,18 @@ fetchDepartments()
           msg.room ===myid ? '' : 'bg-light'
         }`} 
         style={{minWidth:'75%!important'}}>
-          <span className='d-flex flex-column'>
+        <span className='d-flex flex-column'>
         <small className="fw-bold">{msg.senderName}</small>
         <small className="text-muted">{msg.time}</small>
-        <small className="text-muted">{msg.room}</small>
+  
+        <small className="text-muted">{msg.room}</small> 
         <small className="text-muted">{msg.id}</small>
         <small className="text-muted">{myid}</small>
-        
-        
+        <small className="text-muted">{msg.course}</small>
         </span>
          <p style={{
            maxWidth: '60%!important',
-           
-        }}  className={`px-2 py-1 rounded-1 ${msg.id ==myid ? 'bg-primary text-white': ''}`}>
+        }} className={`px-2 py-1 rounded-1 ${msg.id===myid ? 'bg-primary text-white':''}`}>
           {msg.conte}
          </p>
       </div>
@@ -162,14 +200,17 @@ fetchDepartments()
       <form onSubmit={(e)=>{
     e.preventDefault()
     if(!message) return;
-    const getroom=localStorage.getItem("room")!;
-    const socketid=localStorage.getItem("socketid")!;
+   // const getroom=sessionStorage.getItem("room")!;
+   // const socketid=localStorage.getItem("socketid")!;
+    //const socketid=sessionStorage.getItem("socketid")!;
+    //alert(userinfo?.user?.fullname)
     const newMsg ={
-      id: myid,
+      id:myid,
       senderName: userinfo?.user?.fullname,
       senderAvatar:'bi bi-list',
       conte: message,
-      room:getroom,
+      room:rooms,
+      course:file,
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     };
      socket.emit("sendmessage",newMsg)
@@ -178,16 +219,28 @@ fetchDepartments()
     <div className="input-group">
       <input type="text" id="messageInput" value={message} onChange={(e)=>setMessage(e.target.value)} className="form-control" placeholder="Type a message..." aria-label="Message"/>
       <button className="btn btn-primary" type="submit" id="sendButton">
+          <input
+    type="file"
+    id="fileUpload"
+    style={{ display: 'none' }}
+    onChange={handleFileUpload} // <- add your handler here
+  />
+  <label htmlFor="fileUpload" className="btn btn-primary">
+    <i className="bi bi-paperclip"></i>
+  </label>
          <i className="bi bi-send-fill"></i></button>
-    </div>
-    </form>
-    </div>
-  </div>
+          {/* Upload file button */}
+
+
+  {/* Send button */}
+ 
+     </div>
+     </form>
+     </div>
+     </div>
     </div>
    </div>
-
-  
-</div>
+ </div>
   )
 }
 export default Chat
