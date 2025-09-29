@@ -30,12 +30,12 @@ function TimetableTabs() {
      fetchDays();
      fetchTimetable(timepar)
     },[]);
-         const fetchTimetable = async (data:Searchparm) => {
+       const fetchTimetable = async (data:Searchparm)=>{
         //etIsLoading(true);
-         try{
+       try{
             const response = await api.post<TimetableRow[]>(
                 "/timetableSearch",data // replace with your API URL
-          );
+         );
            setTimetable(response.data); // set API array to state
                 console.log("hellotables",response.data);
          }catch (err){
@@ -58,8 +58,7 @@ function TimetableTabs() {
              //setIsLoading(false);
            }
          }
-
-                  const fetchDays = async () => {
+          const fetchDays = async () => {
              //etIsLoading(true);
               try{
                  const response = await api.get<Day[]>(
@@ -76,17 +75,17 @@ function TimetableTabs() {
 
              const fetchLevel = async () => {
                             //etIsLoading(true);
-                           try{
-                               const response = await api.get<getApiLevel>(
+                        try{
+                            const response = await api.get<getApiLevel>(
                                 "/levels" // replace with your API URL
-                             );
-                               setLevel(response.data.levels);//set API array to state
+                          );
+                          setLevel(response.data.levels);//set API array to state
                                //console.log(levels);
-                            }catch (err) {
+                          }catch (err) {
                              // setError("Failed to fetch departments");
-                            } finally {
+                          } finally {
                               //setIsLoading(false);
-                            }
+                          }
                         };
 
                const fetchDepartments = async () => {
@@ -124,10 +123,7 @@ function TimetableTabs() {
                         <option value={item.department_id}>{item.department_name}</option>
                     )
                    }
-
-                   
                </select>
-
                     </div>
                   <div>
                   <label  className="form-label mx-2 fw-semibold">Filter by Levels:</label>
@@ -214,10 +210,6 @@ function TimetableTabs() {
                      
                     )
                     }
-                       
-                     
-                      
-                       
                       
                    </tbody>
                </table>

@@ -17,6 +17,10 @@ import Quiz from './components/Quiz';
 import Viewcourse from './components/Viewcourse';
 import Course from './components/Course';
 import Settings from './components/Settings';
+import Takequiz from './components/Takequiz';
+import StartQuiz from './components/StartQuiz';
+import Sresult from './components/Sresult';
+
 function App() {
 
 const router=createBrowserRouter([
@@ -73,14 +77,25 @@ const router=createBrowserRouter([
          element:<Course/>
         },
          {
-         path:'setting',
-         element:<Settings/>
+          path:'takequiz',
+          element:<Takequiz/>
+         },
+         {
+          path:'takequiz/:deptid/:levid',
+          element:<StartQuiz/>
+         },
+         {
+          path:'takequiz/:id/:lid/Quizresult',
+          element:<Sresult/>
+         },
+         {
+          path:'setting',
+          element:<Settings/>
         }
        ]
       }
-  ]
+     ]
    )
-
    return (
     <div>
         <RouterProvider router={router}/>

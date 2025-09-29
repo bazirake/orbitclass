@@ -5,10 +5,9 @@ import Layout from './Layout';
 const Dashboard = () => {
   
   return(
-    <div>
-         <h1>Dashboard</h1>                   
-         <p>Welcome Dashboard</p> 
-    </div>                        
+         <div className="content flex-grow-1">
+            <h4 className='text-center'>Lecturer Analytics Dashboard</h4>
+            </div>                       
   )
 }
 

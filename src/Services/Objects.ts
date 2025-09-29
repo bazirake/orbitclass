@@ -126,6 +126,17 @@ export interface Course {
   created_at:string;         
   updated_at:string;        
 }
+export interface Courses {
+  course_id:number;          
+  course_code:string;        
+  course_name:string;       
+  description:string;        
+  credit_hours:number;       
+  level_id:number;           
+  department_id:number;      
+  created_at:string;         
+  updated_at:string;        
+}
 
 export interface Day {
   day_id: number;   
@@ -177,6 +188,160 @@ export interface Searchparm{
   semester_id:string;
 
 }
+
+export interface Quiz {
+  quiz_title:string;
+  quiz_description:string;
+  department_id: number;  // ID of the department
+  level_id: number;    
+  course_id: number;   
+  prepared_by: number;  
+  total_marks: number;  
+  duration:number;
+  deadline:string 
+}
+
+export interface QuizQuestion {
+  quiz_id:number;     
+  question_text:string;  
+  marks:number;        
+}
+
+export interface QuizSummary {
+  quiz_id: number; 
+  quiz_title: string; 
+}
+
+export interface QuestionOption{
+  question_id:number; 
+  option_text:string; 
+  is_correct:boolean; 
+}
+
+export interface QuestionOptions{
+  option_id:number; 
+  option_text:string; 
+  is_correct:boolean; 
+}
+export interface Onequestion{
+  question_id:number;
+  question_text:string;
+}
+
+// Represents a single question with its options
+export interface QuizQuestions {
+  question_id: number;
+  question_text: string;
+  marks:number;
+  options: QuestionOptions[];
+ }
+// Represents a quiz with its questions
+export interface QuizWithQuestions {
+   quiz_id:number;
+   quiz_title:string;
+   quiz_description:string;
+   total_marks:number;
+   deadline:string;
+   questions:QuizQuestions[];
+}
+
+// The full API response
+export type QuizzesApiResponse = QuizWithQuestions[];
+
+export interface StudentAnswer {
+  student_id: number;
+  quiz_id: number;
+  question_id: number;
+  option_id: number;
+}
+
+
+export interface StudentResult {
+  student_id: number;
+  quiz_id: number;
+  total_marks_obtained: string;
+  total_possible_marks: string;
+  percentage: string;
+  status: string;
+}
+
+export interface SearchStudent{
+  FULLNAME:string ,
+  department_name:string,
+  level_description:string,
+  STUDENTNUMBER:string,
+  TEL:string,
+  EMAIL:string;
+}
+
+export interface Sparam{
+  department:string;
+  studentnumber:string;
+  level:string;
+}
+
+export interface Sparams{
+  department:string;
+  studentnumber:string;
+  level:string;
+  cid:string;
+}
+
+
+export interface StudentQuizResult {
+   STUDENTNUMBER: string;
+  student_name: string;
+  student_tel: string;
+  department: string;
+  course: string;
+  quiz_id: number;
+  level_of_study: string;
+  total_marks_obtained: string; // can be string if API returns string
+  total_possible_marks: string; // can be string if API returns string
+  percentage: string;
+  status: string; // could also be a union type e.g. "Pass" | "Fail"
+}
+
+export interface FolderRes{
+  id: number;                // Unique identifier
+  name: string;              // Name of the person/student
+  createdAt:string;          // Creation date
+  department: string;        // Department name
+  course: string;            // Course name
+  level: string;             // Level (e.g., beginner, intermediate)
+}
+
+export interface Folderparam {
+  name: string;
+  department: string;
+  course: string;
+  level: string;
+}
+
+export interface UploadedFile {
+   id:string;
+   folder_id:string
+   originalname:string;
+   storedAs:string;
+   path:string;
+   filename:string;
+   created_at:string;
+}
+
+export interface EMAILS{
+  EMAIL:string;
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 

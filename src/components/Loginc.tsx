@@ -9,7 +9,7 @@ function Loginc() {
   const[logindata,setLogindata]=useState<Login>({studentnumber:'',password:''})
   const[errorl,setErrorLogin]=useState<Loginerror>()
   const[isLoading,setLoading]=useState(false);
-  const[departments,setDepartment]=useState<Department[]>([]); 
+  const[department,setDepartment]=useState<Department[]>([]); 
   const[usersty,setUsertype]=useState<UserType[]>([]);
   const[levels,setLevel]=useState<Level[]>([]);
   const[account,setAccount]=useState<Account>({fullname:'',department:'',usertype:'',email:'',password:'',tel:'',classes:'',studentnumber:''});
@@ -85,10 +85,10 @@ useEffect(() => {
     const fetchDepartments = async () => {
       //etIsLoading(true);
       try {
-        const response = await api.get<ApiResponsedepartment>(
-          "/departments" // replace with your API URL
+        const response = await api.get<Department[]>(
+          "/department" //replace with your API URL
         );
-        setDepartment(response.data.results); // set API array to state
+        setDepartment(response.data); // set API array to state
        // console.log(departments);
       } catch (err) {
        // setError("Failed to fetch departments");
@@ -313,7 +313,7 @@ useEffect(() => {
                                     <option >Select department</option>
                                     {
                                    
-                                   departments.map((dept)=>(
+                                   department.map((dept)=>(
                                         <option value={dept.department_id}>{dept.department_name}</option>
                                     ))
                                    }
