@@ -108,10 +108,11 @@
       align-items: center;
     }
     .room-list .list-group-item.active {
-      background-color: #007bff;
-      color: white;
-      border-color: #007bff;
+      background-color:#e0e0e0;
+      color:#333;
+      border: none;
     }
     .room-list .list-group-item i {
       margin-right: 10px;
     }
+    

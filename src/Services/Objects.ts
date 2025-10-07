@@ -11,20 +11,19 @@ export type Loginerror={
 
 export type Account={
    fullname: string;
-  department: string;
-  classes: string;
-  studentnumber: string;
-  email: string;
-  password: string;
-  usertype: string;
-  tel: string;
+   department: string;
+   classes?: string;
+   studentnumber: string;
+   email: string;
+   password: string;
+   usertype: string;
+   tel: string;
  
   }
 
   export type Accounterror={
    fullname?:string;
   department?:string;
-  classes?:string;
   studentnumber?:string;
   email?:string;
   password?:string;
@@ -332,9 +331,62 @@ export interface EMAILS{
   EMAIL:string;
 }
 
+export interface TotalDepartment{
+  total:string;
+}
+
+export interface TotalCourse{
+  total:string;
+}
+export interface TotalAccount{
+  total:string;
+}
 
 
+// data.ts
+export const sales = [
+  { department: "IT", student: 25 },
+  { department: "CS", student: 50 },
+];
 
+export const categories = [
+  { name: "Science", value:900 },
+  { name: "Math",  value: 800},
+  { name: "History", value: 400 },
+  { name: "English", value: 600 },
+];
+
+export const COLORS = ["#4F46E5","#10B981","#F59E0B","#EF4444"];
+
+
+export interface DepartmentData {
+  student: number;
+  department: string;
+}
+
+ export interface UsersMarks {
+  marksobtained: number;
+  department: string;
+  }
+
+ export interface ChartDataInput{
+     name:string;
+     value:number;
+  }
+
+  export interface Message{
+     id:number;
+     sender_id:string;
+     sender_name:string;
+     room:number;
+     content:string;
+     time:string;
+  }
+
+  export const formatLocalTime = (isoString: string): string => {
+  const date = new Date(isoString);
+  return date.toLocaleString(); // will return local date & time
+};
 
 
 

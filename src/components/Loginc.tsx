@@ -19,35 +19,34 @@ function Loginc() {
   const[relogin,setLogrespo]=useState();
   const Navi=useNavigate();
   
-   if (respo=='Logged in successfully') {
-    Navi("main/Dashboard");
-   }
-  const validateAccount=()=>{
+   if(respo=='Logged in successfully'){
+       Navi("main/Dashboard");         
+    }
+   const validateAccount=()=>{
     const phoneRegex = /^(\+250|0)(7[2-9]\d{7})$/;
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
    const error:Accounterror={};
-   if(account.classes=="" || account.classes==null){
-      error.classes="Class field should not be empty";
-    }
-     if(account.department=="" || account.department==null){
-      error.department="Department field should not be empty";
-   }
-      if(account.email=="" || account.email==null){
+
+    
+     if(!account.department){
+       error.department="Department field should not be empty";
+     }
+      if(!account.email){
       error.email="Email field should not be empty";
    }
- if(account.usertype=="" || account.usertype==null){
+ if(!account.usertype){
       error.usertype="Usertype field should not be empty";
    }
-    if(account.tel=="" || account.tel==null){
+    if(!account.tel){
       error.tel="Tel field should not be empty";
    }
-     if(account.studentnumber=="" || account.studentnumber==null){
+     if(!account.studentnumber){
       error.studentnumber="Student number field should not be empty";
    }
-     if(account.fullname=="" || account.fullname==null){
+     if(!account.fullname){
       error.fullname="Fullname field should not be empty";
      }
-     if(account.password=="" || account.password==null){
+     if(!account.password){
       error.password="Password field should not be empty";
     }
      if(account.studentnumber.length!=7){
@@ -82,18 +81,18 @@ function Loginc() {
 
   }
 useEffect(() => {
-    const fetchDepartments = async () => {
+    const fetchDepartments = async()=>{
       //etIsLoading(true);
-      try {
+      try{
         const response = await api.get<Department[]>(
           "/department" //replace with your API URL
         );
         setDepartment(response.data); // set API array to state
        // console.log(departments);
-      } catch (err) {
+      }catch(err){
        // setError("Failed to fetch departments");
-      } finally {
-        //setIsLoading(false);
+      }finally{
+      //setIsLoading(false);
       }
     };
 
@@ -168,9 +167,9 @@ useEffect(() => {
                         }}>
                           <div className="mb-3">
                                    <label  className="form-label">
-                                   StudentNumber
+                                   Student/Lecturer Number
                                        </label>
-                                   <input type="text" value={logindata.studentnumber} onChange={(e)=>setLogindata((prev)=>({...prev,studentnumber:e.target.value}))} className="form-control" id="username" placeholder="Enter Student number"/>
+                                   <input type="text" value={logindata.studentnumber} onChange={(e)=>setLogindata((prev)=>({...prev,studentnumber:e.target.value}))} className="form-control" id="username" placeholder="Enter Student/Lecturer number"/>
                                    {errorl?.errornumber&& (
                                     <span className="text-danger text-sm">{errorl.errornumber}</span>
                                    )}
@@ -182,7 +181,7 @@ useEffect(() => {
                                     <span className="text-danger text-sm">{errorl.errorpass}</span>
                                    )}
                                </div>
-                               <div className="d-grid gap-2 mb-3">
+                                  <div className="d-grid gap-2 mb-3">
                                    <button type="submit" className="btn btn-primary">
                                      {
                                      isLoading &&
@@ -217,33 +216,34 @@ useEffect(() => {
                            </div>
                         
                            <form onSubmit={(e)=>{
-   
-                                e.preventDefault();
-   
-                                if (validateAccount()) {
+
+                             e.preventDefault();
+                             console.log("My validation issue",erraccount);
+
+                               if(validateAccount()) {
                                    api.post("/createaccount",account).
-                                then((data)=>setLogrespo(data.data.message)).
-                                catch(err=>
+                                  then((data)=>setLogrespo(data.data.message)).
+                                  catch(err=>
                                   setLogrespo(err.response.data.sqlMessage)).finally(()=>setLoading(false));
-                                setLoading(false)
+                                  setAccount({fullname:'',department:'',usertype:'',email:'',password:'',tel:'',classes:'',studentnumber:''})
+                                  setLoading(false)
                                 }
                                 
-   
                            }}>
                                <div className="row">
                                    <div className="col-md-6">
                                    <div className="mb-2">
                                      <label  className="form-label">Select UsertType</label>
                                    <select id="exampleSelect" onChange={(e)=>setAccount((prev)=>({...prev,usertype:e.target.value}))} className="form-select">
-                                        <option>Select User type </option>
+                                    <option>Select User type </option>
                                        {
                                          usersty.map((item)=>(
-                                            <option value={item.user_type_id}>{item.type_name}</option>
+                                          <option value={item.user_type_id}>{item.type_name}</option>
                                        ))
                                        }
                                    </select>
                                      {erraccount?.usertype && (
-                                    <span className="text-danger text-sm">{erraccount?.usertype}</span>
+                                    <span className="text-danger text-sm" >{erraccount?.usertype}</span>
                                    )}
                                   </div>
                                        <div className="mb-2">
@@ -251,34 +251,37 @@ useEffect(() => {
                                <input type="text" onChange={(e)=>setAccount((prev)=>({...prev,fullname:e.target.value}))} className="form-control" id="firstName" placeholder="Enterf fullname"/>
                                               {erraccount?.fullname && (
                                     <span className="text-danger text-sm">{erraccount?.fullname}</span>
-                                   )}
+                                      )}
                                        </div>
-                                       <div className="mb-2">
-                                           <label className="form-label">
-                                                     {account.usertype=='1'? 'LecturerNumber':'StudentNumber'}  
-                                              </label>
-                                           <input type="text" onChange={(e)=>setAccount((prev)=>({...prev,studentnumber:e.target.value}))} className="form-control" id="email" placeholder="Enter Studentnumber"/>
+                                        <div className="mb-2">
+                                          <label className="form-label">
+                                              {account.usertype=='1' ? 'LecturerNumber':'StudentNumber'}  
+                                          </label>
+                                        <input type="text" onChange={(e)=>setAccount((prev)=>({...prev,studentnumber:e.target.value}))} className="form-control" id="email" placeholder={account.usertype=='2' ? "Enter Student Number":"Enter Lecturer number"}/>
                                               {erraccount?.studentnumber && (
-                                    <span className="text-danger text-sm">{erraccount?.studentnumber}</span>
-                                   )}
+                                        <span className="text-danger text-sm">{erraccount?.studentnumber}</span>
+                                             )}
                                        </div>
                                        <div className="mb-2">
                                             <label  className="form-label">Password</label>
-                                            <input onChange={(e)=>setAccount((prev)=>({...prev,password:e.target.value}))} type="password" className="form-control" id="password" placeholder="Enter password"/>
+                                            <input value={account.password} onChange={(e)=>setAccount((prev)=>({...prev,password:e.target.value}))} type="password" className="form-control" id="password" placeholder="Enter password"/>
                                                {erraccount?.password && (
                                          <span className="text-danger text-sm">{erraccount?.password}</span>
                                         )}
                                        </div>
-                                       <div className="mb-2">
+                                      <div className="mb-2">
                                            <label  className="form-label">Confirm Password</label>
                                            <input type="password" value={passc} onChange={(e)=>setPassc(e.target.value)} className="form-control" id="phone" placeholder="confirm password"/>
                                               {erraccount?.password && (
-                                    <span className="text-danger text-sm">{erraccount?.password}</span>
-                                   )}
+                                       <span className="text-danger text-sm">{erraccount?.password}</span>
+                                      )}
                                        </div>
                                    </div>
                                   
                                    <div className="col-md-6">
+
+                                     {
+                                     account.usertype=='2' ?  (
                                        <div className="mb-2">
                                      <label  className="form-label">Select Level</label>
                                    <select onChange={(e)=>setAccount((prev)=>({...prev,classes:e.target.value}))} id="exampleSelect" className="form-select">
@@ -289,10 +292,10 @@ useEffect(() => {
                                       }
                                      
                                     </select>
-                                       {erraccount?.classes && (
-                                    <span className="text-danger text-sm">{erraccount?.classes}</span>
-                                   )}
-                                       </div>
+                                       
+                                    </div>
+                                     ):''
+                                     }
                                        <div className="mb-2">
                                            <label  className="form-label">Email</label>
                                            <input onChange={(e)=>setAccount((prev)=>({...prev,email:e.target.value}))} type="text" className="form-control" id="username" placeholder="Enter email"/>
@@ -312,13 +315,11 @@ useEffect(() => {
                                   <select id="exampleSelect" onChange={(e)=>setAccount((prev)=>({...prev,department:e.target.value}))} className="form-select">
                                     <option >Select department</option>
                                     {
-                                   
                                    department.map((dept)=>(
                                         <option value={dept.department_id}>{dept.department_name}</option>
                                     ))
                                    }
                                    </select>
-   
                                       {erraccount?.department && (
                                     <span className="text-danger text-sm">{erraccount?.department}</span>
                                    )}
@@ -328,14 +329,11 @@ useEffect(() => {
                                <div className="d-flex justify-content-between mt-2">
                                    <button type="submit" className="btn btn-primary w-50 ml-2">Save</button>
                                    <a onClick={()=>setLogin(true)} className="btn btn-outline-secondary w-50 mx-3">Sign-in</a>
-   
                                </div>
                                <div className='d-flex justify-content-center'>
                                  {relogin && (
-                                       <span className="text-danger text-center text-sm py-1">{relogin}</span>
+                                  <span className="text-danger text-center text-sm py-1">{relogin}</span>
                                  )}
-
-                              
                                </div>
                            </form>
                        </div>

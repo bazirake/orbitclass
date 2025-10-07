@@ -11,6 +11,7 @@ import { error } from 'console';
   const[sparam,setPara]=useState<Sparams>({department:'',studentnumber:'',cid:'',level:''});
 
     useEffect(()=>{
+
      //lert(students[0].STUDENTNUMBER)
        fetchStudentResults(sparam.department,sparam.studentnumber,sparam.cid,sparam.level)
       fetchCourse();
@@ -49,11 +50,11 @@ import { error } from 'console';
                 }
               }
  
-    const fetchCourse = async()=>{
-       //etIsLoading(true);
+      const fetchCourse = async()=>{
+           //etIsLoading(true);
         try{
            const response = await api.get<Course[]>(
-                  "/api/courses"//replace with your API URL
+                 "/api/courses"//replace with your API URL
              );
              setCourse(response.data); // set API array to state
                console.log("table",response.data);
@@ -63,14 +64,15 @@ import { error } from 'console';
                 //setIsLoading(false);
               }
             }
- 
+
          const  fetchStudentResults = async(dept:any,stun:any,lev:any,cid:any)=>{
                 // alert(dept+','+stun+','+lev+','+cid)
                   console.log("Params",sparam);
            try{
+
            const response = await api.get<StudentQuizResult[]>(
                   `/api/student-results?department=${dept}&studentId=${stun}&course=${cid}&level=${lev}`
-                  
+                
                    // replace with your API URL
            );
               setStudents(response.data); // set API array to state

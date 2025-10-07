@@ -1,18 +1,23 @@
 import React, { useEffect, useState } from 'react';
+import { api } from '../Services/api';
 
 interface CountdownProps {
   initialSeconds: number;
   onComplete?: () => void; // optional callback when timer hits 0
 }
 
-const Countdown: React.FC<CountdownProps> = ({initialSeconds, onComplete }) => {
+const Countdown: React.FC<CountdownProps> = ({ initialSeconds, onComplete }) => {
   const [seconds, setSeconds] = useState<number>(initialSeconds);
-///alert(initialSeconds);
-  // ⬇️ Effect to handle countdown
+
+  useEffect(() => {
+    // reset seconds if initialSeconds changes
+    setSeconds(initialSeconds);
+  }, [initialSeconds]);
+
   useEffect(() => {
     if (seconds <= 0) {
       if (onComplete) onComplete();
-      return; // stop timer
+      return;
     }
 
     const interval = setInterval(() => {
@@ -27,18 +32,21 @@ const Countdown: React.FC<CountdownProps> = ({initialSeconds, onComplete }) => {
     }, 1000);
 
     return () => clearInterval(interval); // cleanup
-  }, [seconds, onComplete]);
+  }, [onComplete]); // ✅ only depends on onComplete
 
-  // ⬇️ Format mm:ss
   const minutes = Math.floor(seconds / 60);
   const secs = seconds % 60;
 
-  return (
 
-    <span className='fw-bold'>
+
+
+
+  
+
+  return (
+    <span className="fw-bold">
       {minutes}:{secs.toString().padStart(2, '0')}
     </span>
-
   );
 };
 

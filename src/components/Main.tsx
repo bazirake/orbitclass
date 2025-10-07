@@ -14,12 +14,12 @@ function Main() {
               try {
                 
                // alert(userinfo.type_name)
-                const response = await api.get<getMenueItem>(
-                  `/api/menus?usertype=${userinfo.user.type_name}`//replace with your API URL
+                const response = await api.get<MenuItem[]>(
+                  `/menu/${userinfo.user.usertype}`//replace with your API URL
                 );
                //console.log("hello" ,response.data)
               //  alert('hello')
-                setMenue(response.data.results); // set API array to state
+                setMenue(response.data); // set API array to state
                 console.log(response.data);
               } catch (err) {
                // setError("Failed to fetch departments");

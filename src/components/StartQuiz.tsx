@@ -11,12 +11,14 @@ function StartQuiz() {
     const location=useLocation();
     const[quiz,setQuiz]=useState<QuizWithQuestions[]>([]);
     const[answers,setAnswers]=React.useState<{[key:number]:number}>({});
-    const[duration,setDuration]=useState<number>(0);
+  //  const[duration,setDuration]=useState<number>(0);
+    const [duration, setDuration] = useState<number | null>(null);
+    const [times,setTime]=useState(1);
     const dureid=localStorage.getItem('duration')!;
     const submitButtonRef = useRef<HTMLButtonElement|null>(null);
     //key=question_id,value=option_id chosen
     useEffect(()=>{
-     // alert(dureid);
+     //alert(dureid);
      // alert(deptid)
     fetchQuiz(Number(deptid),Number(levid));
       //alert("my God")  
@@ -24,8 +26,9 @@ function StartQuiz() {
       if(!quizIdStr) return; //nothing stored
       const quizId =Number(quizIdStr);
       fetchDuration(quizId);
-      //alert("Hello!!!"+quizId)
-      },[duration]);
+
+      
+      },[]);
 
      const navigate =useNavigate();
      const userinfo =JSON.parse(localStorage.getItem('auth')!);
@@ -37,6 +40,7 @@ function StartQuiz() {
                 //alert(duration)
                //alert(response.data[0].quiz_description)
                console.log("welcome",response.data[0].quiz_id);
+               fetchDuration(response.data[0].quiz_id)
                setQuiz(response.data);//set API array to state
                localStorage.setItem("quizid",response.data[0].quiz_id.toString())
                console.log("mbega",response.data[0].quiz_id);
@@ -52,7 +56,7 @@ function StartQuiz() {
             };
        const handleSubmit = async ()=>{
         try{
-const quizIdStr=localStorage.getItem('quizid')??null;
+  const quizIdStr=localStorage.getItem('quizid') ?? null;
         const payload = Object.entries(answers).map(([qId, optId]) => ({
          student_id:Number(userinfo.user.id), // from session
          question_id:Number(qId),
@@ -75,26 +79,50 @@ const quizIdStr=localStorage.getItem('quizid')??null;
         }
 
      const handleComplete =()=>{
-       alert('Time is up!!')
-        //handleSubmit();
-       //submit quiz or do something else
+         setTime(0);
+         const quizIdStr=localStorage.getItem('quizid') ?? 0;
+          //alert(quizIdStr)
+         //if(!quizIdStr) return; //nothing stored
+         updatedurationQuiz(Number(quizIdStr))
+          //handleSubmit();
+          //submit quiz or do something else
       };
    //alert(deptid)
 
-    const fetchDuration = async (quid:number) => {
-      try {
-        const response = await api.get(`/api/quiz/${quid}/duration`); // your server
-       // setDuration(Number(response.data.duration));
-        localStorage.setItem("duration",response.data.duration)
-       // alert(Number(response.data.duration))
-        //seconds from DB
-        //alert('durationsss'+response.data.duration)
-       // alert(response.data.duration)
-        console.log("Countdown",response.data.duration)
-      } catch (err) {
-        console.error('Error fetching duration', err);
-      }
-    };
+
+
+     const updatedurationQuiz =async(quid:any)=>{
+         try{
+             const response =await api.put(
+                    `/api/uquiz/${quid}/duration`
+               );
+                 //alert(duration)
+                //alert(response.data[0].quiz_description)
+               // console.log("welcome",response.data[0].quiz_id);
+               // fetchDuration(response.data[0].quiz_id)
+               // setQuiz(response.data);//set API array to state
+               // localStorage.setItem("quizid",response.data[0].quiz_id.toString())
+              //  console.log("mbega",response.data[0].quiz_id);
+                }catch(err){
+                //setError("Failed to fetch departments");
+                }finally{
+                 //setIsLoading(false);
+                }
+                };
+
+
+ const fetchDuration = async (quid:number) => {
+  try {
+    const response = await api.get(`/api/quiz/${quid}/duration`);
+    const dur = Number(response.data.duration);
+    setDuration(dur);
+    localStorage.setItem("duration", dur.toString());
+    console.log("Countdown Duration:", dur);
+  } catch (err) {
+    console.error('Error fetching duration', err);
+  }
+};
+   
   return (
   <div className="container">
      <div className="row justify-content-center">
@@ -102,10 +130,20 @@ const quizIdStr=localStorage.getItem('quizid')??null;
         <div className="card shadow">
           <div className="card-header text-dark d-flex justify-content-between align-items-center">
              <h5 className="mb-0">Quiz Questions for {quiz.map((item)=><strong>{item.quiz_title} &nbsp;&nbsp;&nbsp;/<span className='ml-3'>{item.total_marks} Marks</span></strong>)}</h5>
-             <span>Time Remaining: <span id="timer">
-              <Countdown initialSeconds={Number(dureid)} onComplete={handleComplete} />  
-                </span></span>
-          </div>
+            <span>Time Remaining: <span id="timer">
+
+  <span> 
+  {duration !== null ? (
+    <Countdown initialSeconds={duration} onComplete={handleComplete} />
+  ) : (
+    <span>Loading...</span>
+  )}
+</span>
+
+
+             
+              </span></span>
+           </div>
           <div className="card-body">
             <form id="quizForm" onSubmit={(e)=>{
                 e.preventDefault()
@@ -136,7 +174,7 @@ const quizIdStr=localStorage.getItem('quizid')??null;
        )}
         </div>
         <div className="d-flex mt-3">
-        <button type="submit" className="btn btn-primary" id="submitBtn">Submit Quiz</button>
+        {times==1 ? (<button type="submit" className="btn btn-primary" id="submitBtn">Submit Quiz</button>):''}
         </div>
             </form>
           </div>

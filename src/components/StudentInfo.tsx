@@ -28,14 +28,14 @@ function StudentInfo() {
         </li>
         <li className="nav-item">
           <button
-            className={`nav-link ${activeTab === "sbasic" ? "active" : ""}`}
-            onClick={() => setActiveTab("sbasic")}
+             className={`nav-link ${activeTab === "sbasic" ? "active" : ""}`}
+             onClick={() => setActiveTab("sbasic")}
           >
-            Studentdetails
+             Studentdetails
           </button>
         </li>
       </ul>
-
+      
       {/* Tab Content */}
       <div className="tab-content p-3 border border-top-0">
         {activeTab === "sresult" && (
