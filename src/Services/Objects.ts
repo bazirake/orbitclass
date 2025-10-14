@@ -273,9 +273,30 @@ export interface SearchStudent{
   EMAIL:string;
 }
 
+
+export interface Courses{
+  course_id:number;
+  course_name:string ,
+  description:string,
+  credit_hours:number,
+  level_description:string;
+  level_id:number,
+  department_id:number,
+  department_name:string;
+  created_at:string;
+  updated_at:string;
+}
+
+
 export interface Sparam{
   department:string;
   studentnumber:string;
+  level:string;
+}
+
+export interface Sparamc{
+  department:string;
+  
   level:string;
 }
 

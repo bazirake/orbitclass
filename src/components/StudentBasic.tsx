@@ -1,22 +1,22 @@
 
  import React, { useEffect, useState } from 'react'
  import { api } from '../Services/api';
- import { Departments, ApiResponsedepartments, Department, getApiLevel, Level, Semester, Instructor, Course, Day, TimetableType, CourseSchedule, Quiz, QuizSummary, QuizQuestion, Onequestion, QuestionOption, SearchStudent, Sparam } from '../Services/Objects';
+ import { Departments, ApiResponsedepartments, Department, getApiLevel, Level, Semester, Instructor, Course, Day, TimetableType, CourseSchedule, Quiz, QuizSummary, QuizQuestion, Onequestion, QuestionOption, SearchStudent, Sparam, Courses, Sparamc } from '../Services/Objects';
  import { error } from 'console';
    function StudentBasic(){
  const[courses,setCourse]=useState<Course[]>();
  const[department,setDepartment]=useState<Department[]>([]);
  const[levels,setLevel]=useState<Level[]>([]);
  const[students,setStudent]=useState<SearchStudent[]>([]);
- const[sparam,setPara]=useState<Sparam>({studentnumber:'',level:'',department:''});
+ const[coursess,setCourses]=useState<Courses[]>([]);
+ const[sparam,setPara]=useState<Sparamc>({level:'',department:''});
 
   useEffect(()=>{
-     fetchStudentdetails(sparam.department,sparam.studentnumber,sparam.level)
+     fetchStudentdetails(sparam.department,sparam.level)
       fetchCourse();
       fetchDepartments();
       fetchLevel();
-     //const id=quizs?.map(({quiz})=>quiz)
-     
+      //const id=quizs?.map(({quiz})=>quiz)
     },[sparam])
 
        const fetchLevel = async () => {
@@ -64,14 +64,14 @@
              }
            }
 
-            const fetchStudentdetails = async(dept:any,stun:any,lev:any)=>{
+            const fetchStudentdetails = async(dept:any,lev:any)=>{
       //etIsLoading(true);
        try{
-          const response = await api.get<SearchStudent[]>(
-                 `/students?department=${dept}&studentnumber=${stun}&level=${lev}` // replace with your API URL
+          const response = await api.get<Courses[]>(
+                 `api/coursess?department_id=${dept}&level_id=${lev}` // replace with your API URL
           );
-          setStudent(response.data); // set API array to state
-              console.log("StudentSearch",response.data);
+          setCourses(response.data); // set API array to state
+              console.log("courses",response.data);
          }catch(err){
               //setError("Failed to fetch departments");
              }finally{
@@ -82,7 +82,7 @@
   return (
      <form onSubmit={(e)=>{
         e.preventDefault();
-        fetchStudentdetails(sparam.department,sparam.studentnumber,sparam.level)
+        fetchStudentdetails(sparam.department,sparam.level)
      }}>
     <fieldset className="border border-primary rounded p-3">
     <legend className="float-none w-auto px-2">Filter</legend>
@@ -112,10 +112,7 @@
                          }
                     </select>
                 </div>
-                 <div className="col-md-3">
-                    <label  className="form-label">Studentnumber:</label>
-                    <input type='text' className='form-control' onChange={(e)=>setPara((prev)=>({...prev,studentnumber:e.target.value}))}></input> 
-                </div>
+               
                 <div className="col-md-3 mt-3">
                     <button style={{position:'relative',top:30,left:50}} className='btn btn-primary'> <i className="bi bi-upload"></i>LoadData</button>
                 </div>
@@ -128,22 +125,22 @@
                     <thead className="table-primary">
                         <tr>
                             <th>ID</th>
-                            <th>Name</th>
-                            <th>Department</th>
+                            <th>Course</th>
+                            <th>Coursedes</th>
                             <th>Level</th>
-                            <th>Studentnumber</th>
-                            <th>Tel</th>
+                            <th>CreditHours</th>
+                         
                         </tr>
                     </thead>
                      <tbody id="studentTable">
-                        {students.map((item,index)=>(
+                        {coursess.map((item,index)=>(
                            <tr>
                             <td>{index+1}</td>
-                            <td>{item.FULLNAME}</td>
-                            <td>{item.department_name}</td>
+                            <td>{item.course_name}</td>
+                            <td>{item.description}</td>
                             <td>{item.level_description}</td>
-                            <td>{item.STUDENTNUMBER}</td>
-                            <td>{item.TEL}</td>
+                            <td>{item.credit_hours}</td>
+                          
                             
                             </tr>     
                         ))}
