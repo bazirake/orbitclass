@@ -321,13 +321,13 @@ function Preparequiz() {
           <button type="submit" className="btn btn-primary d-block mx-auto">
             Create Question
           </button>
-          <button
+          {/* <button
             type="button"
             className="btn btn-success"
             onClick={() => fetchQuizid(getmesstime.quiz_id)}
           >
             Load Quizzes
-          </button>
+          </button> */}
         </fieldset>
       </form>
 
@@ -386,7 +386,7 @@ function Preparequiz() {
                 onChange={(e) => setOption((prev) => ({ ...prev, is_correct: e.target.checked }))}
               />
               <label className="form-check-label">Is it a correct answer?</label>
-              <div>
+              {/* <div>
                 <button
                   type="button"
                   className="btn btn-success"
@@ -394,7 +394,7 @@ function Preparequiz() {
                 >
                   Load Question
                 </button>
-              </div>
+              </div> */}
             </div>
           </div>
           <button type="submit" className="btn btn-primary d-block mx-auto">
