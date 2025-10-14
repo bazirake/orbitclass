@@ -18,10 +18,11 @@ function Course() {
 
   // Get user info from localStorage (assuming same structure as FolderPanel)
   const userinfo = JSON.parse(localStorage.getItem('auth')!);
-  const userType = userinfo?.user?.user_type || 0; // Default to 0 if not found; adjust if user_type is userinfo.user_type
-  const canManageFolders = userType === 1; // ID 1: Can create/delete folders; ID 2: View only
+  const userType = userinfo?.user?.usertype || 0; // Default to 0 if not found; adjust if user_type is userinfo.user_type
+  const canManageFolders = Number(userType) === 1; // ID 1: Can create/delete folders; ID 2: View only
 
   useEffect(() => {
+ // alert(canManageFolders);
     fetchDepartments();
     fetchCourse();
     fetchLevel();

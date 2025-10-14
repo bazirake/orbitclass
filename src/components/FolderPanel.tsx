@@ -21,8 +21,8 @@ const FolderPanel: React.FC<UploadCoursePanelProps> = ({ isOpen, onClose, folder
   const [pemail, setPemail] = useState<string[]>([]);
   const [uploadres, setUploadres] = useState('');
   const userinfo = JSON.parse(localStorage.getItem('auth')!);
-  const userType = userinfo?.user?.user_type || 0;
-  const canUploadAndManage = userType === 1;
+  const userType = userinfo?.user?.usertype || 0;
+  const canUploadAndManage = Number(userType) === 1;
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const fetchCourseFiles = async (fid: any) => {
@@ -211,7 +211,7 @@ const FolderPanel: React.FC<UploadCoursePanelProps> = ({ isOpen, onClose, folder
                       >
                         <i className="bi bi-download"></i> Download
                       </a>
-                      {canUploadAndManage && (
+                      {/* {canUploadAndManage && (
                         <button
                           className="btn btn-sm btn-danger ms-1"
                           onClick={async () => {
@@ -227,7 +227,7 @@ const FolderPanel: React.FC<UploadCoursePanelProps> = ({ isOpen, onClose, folder
                         >
                           Delete
                         </button>
-                      )}
+                      )} */}
                     </td>
                   </tr>
                 ))
