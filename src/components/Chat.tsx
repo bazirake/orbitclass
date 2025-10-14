@@ -56,6 +56,9 @@ import Course from './Course';
   // ✅ Single chatMessage listener only
   const handleChatMessage = (msg: Message) => {
     if (msg.room === room) {
+
+
+      
       setMessages((prev) => [...prev, msg]);
     }
   };

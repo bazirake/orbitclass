@@ -28,8 +28,7 @@ function Quiz() {
         <li className="nav-item">
           <button
             className={`nav-link ${activeTab === "View" ? "active" : ""}`}
-            onClick={() => setActiveTab("View")}
-          >
+            onClick={() => setActiveTab("View")}>
             View
           </button>
         </li>
