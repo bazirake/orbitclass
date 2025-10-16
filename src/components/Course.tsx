@@ -51,7 +51,7 @@ function Course() {
 
   const fetchFolders = async () => {
     try {
-      const response = await api.get<FolderRes[]>('/api/getfolders');
+      const response = await api.get<FolderRes[]>(`/api/folders/${userinfo?.user?.department_name}/${userinfo?.user?.level_id}`);
       setFolders(response.data);
       console.log('Folders:', response.data);
     } catch (err) {
@@ -237,7 +237,7 @@ function Course() {
                     required
                   >
                     <option value="">Course</option>
-                    {courses.map((item) => (
+                    {courses.map((item) =>(
                       <option key={item.description} value={item.description}>
                         {item.description}
                       </option>

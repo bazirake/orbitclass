@@ -1,188 +1,193 @@
-import React,{useEffect,useRef,useState } from 'react'
-import {useLocation,useNavigate,useParams} from 'react-router-dom'
-import {api} from '../Services/api';
-import {Department,QuizWithQuestions,QuizzesApiResponse,StudentResult } from '../Services/Objects';
+import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
+import { api } from '../Services/api';
+import { QuizWithQuestions } from '../Services/Objects';
 import Countdown from './Countdown';
 
 function StartQuiz() {
-    const{deptid}=useParams(); // quizid matches :quizid in route
-    const{levid}=useParams(); 
-    const Navigate=useNavigate();
-    const location=useLocation();
-    const[quiz,setQuiz]=useState<QuizWithQuestions[]>([]);
-    const[answers,setAnswers]=React.useState<{[key:number]:number}>({});
-  //  const[duration,setDuration]=useState<number>(0);
-    const [duration, setDuration] = useState<number | null>(null);
-    const [times,setTime]=useState(1);
-    const dureid=localStorage.getItem('duration')!;
-    const submitButtonRef = useRef<HTMLButtonElement|null>(null);
-    //key=question_id,value=option_id chosen
-    useEffect(()=>{
-     //alert(dureid);
-     // alert(deptid)
-    fetchQuiz(Number(deptid),Number(levid));
-      //alert("my God")  
-      const quizIdStr=localStorage.getItem('quizid');
-      if(!quizIdStr) return; //nothing stored
-      const quizId =Number(quizIdStr);
-      fetchDuration(quizId);
+  const { deptid, levid } = useParams<{ deptid: string; levid: string }>();
+  const navigate = useNavigate();
+  const [quiz, setQuiz] = useState<QuizWithQuestions | null>(null);
+  const [answers, setAnswers] = useState<{ [key: number]: number }>({});
+  const [duration, setDuration] = useState<number | null>(null);
+  const [isTimeUp, setIsTimeUp] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const submitButtonRef = useRef<HTMLButtonElement | null>(null);
+  const userinfo = JSON.parse(localStorage.getItem('auth') || '{}');
 
-      
-      },[]);
+  useEffect(() => {
+    if (!deptid || !levid) {
+      setError('Invalid department or level ID.');
+      return;
+    }
+    fetchQuiz(Number(deptid), Number(levid));
+  }, [deptid, levid]);
 
-     const navigate =useNavigate();
-     const userinfo =JSON.parse(localStorage.getItem('auth')!);
-     const fetchQuiz =async(deptid:number,levid:number)=>{
-        try{
-            const response =await api.get<QuizzesApiResponse>(
-                              `/api/quizzes/${deptid}/${levid}`//replace with your API URL
-              );
-                //alert(duration)
-               //alert(response.data[0].quiz_description)
-               console.log("welcome",response.data[0].quiz_id);
-               fetchDuration(response.data[0].quiz_id)
-               setQuiz(response.data);//set API array to state
-               localStorage.setItem("quizid",response.data[0].quiz_id.toString())
-               console.log("mbega",response.data[0].quiz_id);
-               }catch(err){
-               //setError("Failed to fetch departments");
-               }finally{
-                //setIsLoading(false);
-               }
-               };
-
-         const handleSelect = (questionId:number,optionId:number) => {
-             setAnswers(prev => ({...prev,[questionId]:optionId}));
-            };
-       const handleSubmit = async ()=>{
-        try{
-  const quizIdStr=localStorage.getItem('quizid') ?? null;
-        const payload = Object.entries(answers).map(([qId, optId]) => ({
-         student_id:Number(userinfo.user.id), // from session
-         question_id:Number(qId),
-         option_id:optId as number,
-         quiz_id:Number(quizIdStr)
-         }));
-      // ✅ Axios POST request
-      const response = await api.post('/api/student-answers',payload);
-      console.log(response.data);//server response
-        alert('Answers submitted successfully!');
-       // submitButtonRef.current?.click();
-        Navigate(`Quizresult`);
-        }catch (err:any) {
-        if (err.response?.status === 409) {
-         alert(err.response.data.error);
+  const fetchQuiz = async (department_id: number, level_id: number) => {
+    try {
+      setError(null);
+      const response = await api.get<QuizWithQuestions[]>(`/api/quizzes/${department_id}/${level_id}`);
+      if (response.data.length === 0) {
+        setError('No quiz found for the selected department and level.');
+        return;
       }
-       // console.error("Error details",error);
-       // alert('Error submitting answers');
-        }
-        }
+      const selectedQuiz = response.data[0]; // Take the first quiz
+      setQuiz(selectedQuiz);
+      localStorage.setItem('quizid', selectedQuiz.quiz_id.toString());
+      fetchDuration(selectedQuiz.quiz_id);
+      console.log('Quiz fetched:', selectedQuiz);
+    } catch (err: any) {
+      console.error('Failed to fetch quiz:', err.response?.data || err.message);
+      setError('Failed to load quiz. Please try again.');
+    }
+  };
 
-     const handleComplete =()=>{
-         setTime(0);
-         const quizIdStr=localStorage.getItem('quizid') ?? 0;
-          //alert(quizIdStr)
-         //if(!quizIdStr) return; //nothing stored
-         updatedurationQuiz(Number(quizIdStr))
-          //handleSubmit();
-          //submit quiz or do something else
-      };
-   //alert(deptid)
+  const fetchDuration = async (quizId: number) => {
+    try {
+      const response = await api.get<{ duration: number }>(`/api/quiz/${quizId}/duration`);
+      const dur = Number(response.data.duration);
+      setDuration(dur);
+      localStorage.setItem('duration', dur.toString());
+      console.log('Countdown Duration:', dur);
+    } catch (err: any) {
+      console.error('Error fetching duration:', err.response?.data || err.message);
+      setError('Failed to load quiz duration.');
+    }
+  };
 
+  const handleSelect = (questionId: number, optionId: number) => {
+    setAnswers((prev) => ({ ...prev, [questionId]: optionId }));
+  };
 
+  const handleSubmit = async () => {
+    if (!quiz) return;
+    try {
+      const quizId = Number(localStorage.getItem('quizid'));
+      const payload = Object.entries(answers).map(([qId, optId]) => ({
+        student_id: Number(userinfo?.user?.id),
+        question_id: Number(qId),
+        option_id: optId,
+        quiz_id: quizId,
+      }));
+      const response = await api.post('/api/student-answers', payload);
+      console.log('Submit response:', response.data);
+      alert('Answers submitted successfully!');
+      navigate('/quizresult');
+    } catch (err: any) {
+      console.error('Error submitting answers:', err.response?.data || err.message);
+      const errorMessage = err.response?.status === 409 ? err.response.data.error : 'Error submitting answers.';
+      alert(errorMessage);
+    }
+  };
 
-     const updatedurationQuiz =async(quid:any)=>{
-         try{
-             const response =await api.put(
-                    `/api/uquiz/${quid}/duration`
-               );
-                 //alert(duration)
-                //alert(response.data[0].quiz_description)
-               // console.log("welcome",response.data[0].quiz_id);
-               // fetchDuration(response.data[0].quiz_id)
-               // setQuiz(response.data);//set API array to state
-               // localStorage.setItem("quizid",response.data[0].quiz_id.toString())
-              //  console.log("mbega",response.data[0].quiz_id);
-                }catch(err){
-                //setError("Failed to fetch departments");
-                }finally{
-                 //setIsLoading(false);
-                }
-                };
+  const handleComplete = async () => {
+    setIsTimeUp(true);
+    const quizId = Number(localStorage.getItem('quizid'));
+    if (quizId) {
+      await updateDurationQuiz(quizId);
+      await handleSubmit(); // Auto-submit when time is up
+    }
+  };
 
+  const updateDurationQuiz = async (quizId: number) => {
+    try {
+      await api.put(`/api/uquiz/${quizId}/duration`);
+      console.log('Quiz duration updated');
+    } catch (err: any) {
+      console.error('Error updating quiz duration:', err.response?.data || err.message);
+    }
+  };
 
- const fetchDuration = async (quid:number) => {
-  try {
-    const response = await api.get(`/api/quiz/${quid}/duration`);
-    const dur = Number(response.data.duration);
-    setDuration(dur);
-    localStorage.setItem("duration", dur.toString());
-    console.log("Countdown Duration:", dur);
-  } catch (err) {
-    console.error('Error fetching duration', err);
+  if (error) {
+    return (
+      <div className="container mt-4">
+        <div className="alert alert-danger" role="alert">
+          {error}
+        </div>
+      </div>
+    );
   }
-};
-   
+
+  if (!quiz) {
+    return (
+      <div className="container mt-4">
+        <div className="text-center">
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-  <div className="container">
-     <div className="row justify-content-center">
-      <div className="col-md-12">
-        <div className="card shadow">
-          <div className="card-header text-dark d-flex justify-content-between align-items-center">
-             <h5 className="mb-0">Quiz Questions for {quiz.map((item)=><strong>{item.quiz_title} &nbsp;&nbsp;&nbsp;/<span className='ml-3'>{item.total_marks} Marks</span></strong>)}</h5>
-            <span>Time Remaining: <span id="timer">
-
-  <span> 
-  {duration !== null ? (
-    <Countdown initialSeconds={duration} onComplete={handleComplete} />
-  ) : (
-    <span>Loading...</span>
-  )}
-</span>
-
-
-             
-              </span></span>
-           </div>
-          <div className="card-body">
-            <form id="quizForm" onSubmit={(e)=>{
-                e.preventDefault()
-                handleSubmit();
-            }}  className="needs-validation">
-            <div className="mb-4">
-
-    {quiz.map((item) =>
-  item.questions.map((que, index) => (
-    <div key={que.question_id}>
-      <h5>
-        {index + 1}.{que.question_text} &nbsp;&nbsp;/{que.marks}
-      </h5>
-      {que.options.map((opt)=>(
-        <div className="form-check" key={opt.option_id}>
-          <input
-            className="form-check-input"
-            type="radio"
-            name={`q-${que.question_id}`} //✅ unique name per question
-            value={opt.option_id}
-            onChange={() => handleSelect(que.question_id,opt.option_id)} // ✅ track answers
-          />
-            <label className="form-check-label">{opt.option_text}</label>
+    <div className="container mt-4">
+      <div className="row justify-content-center">
+        <div className="col-md-12">
+          <div className="card shadow">
+            <div className="card-header text-dark d-flex justify-content-between align-items-center">
+              <h5 className="mb-0">
+                <strong>
+                  {quiz.quiz_title} <span className="ms-3">{quiz.total_marks} Marks</span>
+                </strong>
+              </h5>
+              <span>
+                Time Remaining:{' '}
+                {duration !== null ? (
+                  <Countdown initialSeconds={duration} onComplete={handleComplete} />
+                ) : (
+                  <span>Loading...</span>
+                )}
+              </span>
             </div>
-           ))}
-        </div>
-       ))
-       )}
-        </div>
-        <div className="d-flex mt-3">
-        {times==1 ? (<button type="submit" className="btn btn-primary" id="submitBtn">Submit Quiz</button>):''}
-        </div>
-            </form>
+            <div className="card-body">
+              <form
+                id="quizForm"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleSubmit();
+                }}
+                className="needs-validation"
+              >
+                <div className="mb-4">
+                  {quiz.questions.map((que, index) => (
+                    <div key={que.question_id} className="mb-3">
+                      <h5>
+                        {index + 1}. {que.question_text} <span className="ms-2">/{que.marks}</span>
+                      </h5>
+                      {que.options.map((opt) => (
+                        <div className="form-check" key={opt.option_id}>
+                          <input
+                            className="form-check-input"
+                            type="radio"
+                            name={`q-${que.question_id}`}
+                            value={opt.option_id}
+                            checked={answers[que.question_id] === opt.option_id}
+                            onChange={() => handleSelect(que.question_id, opt.option_id)}
+                            disabled={isTimeUp}
+                          />
+                          <label className="form-check-label">{opt.option_text}</label>
+                        </div>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+                {!isTimeUp && (
+                  <div className="d-flex mt-3">
+                    <button type="submit" className="btn btn-primary" ref={submitButtonRef}>
+                      Submit Quiz
+                    </button>
+                  </div>
+                )}
+              </form>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  )
+  );
 }
 
-export default StartQuiz
+export default StartQuiz;

@@ -12,25 +12,19 @@ import Preparequiz from './Preparequiz';
 import Viewquiz from './Viewquiz';
 import StudentResult from './StudentResult';
 import StudentBasic from './StudentBasic';
+import Listcourse from './Listcourse';
 function Viewcourse() {
    const [activeTab,setActiveTab] = useState("sresult");
   return (
     <div className="container mt-2">
       <h4 className="text-center mb-1">Course information panel</h4>
       {/* Nav Tabs */}
-     
-     
-      
+
       {/* Tab Content */}
       <div className="tab-content p-3 border border-top-0">
-      
-       
-       
           <div className="tab-pane fade show active">
-            <StudentBasic/>
+               <Listcourse/>
           </div>
-        
-        
       </div>
     </div>
   );

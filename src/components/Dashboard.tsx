@@ -18,6 +18,8 @@ const Dashboard = () => {
 const [userResult, setUserResult] = useState<ChartDataInput[]>([
 
 ]);
+ const userinfo = JSON.parse(localStorage.getItem('auth')!);
+  const userType = userinfo?.user?.usertype || 0; 
   
         const fetchTotalDepartment = async () => {
              //etIsLoading(true);
@@ -101,13 +103,11 @@ const [userResult, setUserResult] = useState<ChartDataInput[]>([
              
             },[])
 
-
-
   return (
     <div className="">
       {/* Line Chart */}
       <div className="p-6 bg-gray-50 min-h-screen container">
-       <h4 className="text-sm text-center font-bold mb-6 pb-3">📊Lecturer Analytics Dashboard</h4>
+       <h4 className="text-sm text-center font-bold mb-6 pb-3">📊{userinfo?.user?.type_name} Analytics Dashboard</h4>
 
        {/* Metrics */}
      <div className="row g-4">
@@ -162,7 +162,7 @@ const [userResult, setUserResult] = useState<ChartDataInput[]>([
 
       </div>
        <div className="bg-white p-6 rounded-2xl shadow">
-          <h5 className="text-md font-semibold pt-3 px-3 mb-4">Departments with Students</h5>
+          <h5 className="text-md font-semibold pt-3 px-3 mb-4">Students per department</h5>
         <ResponsiveContainer width="100%" height={300}>
          <LineChart data={totalDepart} width={600} height={300}>
   <CartesianGrid strokeDasharray="3 3" />
@@ -189,7 +189,7 @@ const [userResult, setUserResult] = useState<ChartDataInput[]>([
 
       {/* Bar Chart */}
           <div className="bg-white p-6 rounded-2xl shadow">
-          <h5 className="text-md font-semibold pt-3 px-3 mb-4">Departments score</h5>
+          <h5 className="text-md font-semibold pt-3 px-3 mb-4">Score per department</h5>
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={totalResult}>
             <CartesianGrid strokeDasharray="3 3" />
@@ -203,7 +203,7 @@ const [userResult, setUserResult] = useState<ChartDataInput[]>([
       </div>
 
  <div className="bg-white p-6 rounded-2xl shadow">
-<h5 className="text-xl font-semibold mb-4">Course score</h5>
+<h5 className="text-xl font-semibold mb-4">Scores per subject</h5>
 
 <ResponsiveContainer width="100%" height={300}>
   <PieChart>
