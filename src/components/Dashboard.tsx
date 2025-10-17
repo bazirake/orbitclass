@@ -189,7 +189,7 @@ const [userResult, setUserResult] = useState<ChartDataInput[]>([
 
       {/* Bar Chart */}
           <div className="bg-white p-6 rounded-2xl shadow">
-          <h5 className="text-md font-semibold pt-3 px-3 mb-4">Score per department</h5>
+          <h5 className="text-md font-semibold pt-3 px-3 mb-4">Department Performance</h5>
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={totalResult}>
             <CartesianGrid strokeDasharray="3 3" />
@@ -203,7 +203,7 @@ const [userResult, setUserResult] = useState<ChartDataInput[]>([
       </div>
 
  <div className="bg-white p-6 rounded-2xl shadow">
-<h5 className="text-xl font-semibold mb-4">Scores per subject</h5>
+<h5 className="text-xl font-semibold mb-4">Subject Performance</h5>
 
 <ResponsiveContainer width="100%" height={300}>
   <PieChart>
