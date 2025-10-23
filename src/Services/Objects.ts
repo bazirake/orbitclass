@@ -197,6 +197,7 @@ export interface Quiz {
   prepared_by: number;  
   total_marks: number;  
   duration:number;
+  at:string;
   deadline:string 
 }
 
@@ -380,7 +381,7 @@ export const categories = [
 export const COLORS = ["#4F46E5","#10B981","#F59E0B","#EF4444"];
 
 
-export interface DepartmentData {
+export interface DepartmentData{
   student: number;
   department: string;
 }
@@ -404,10 +405,23 @@ export interface DepartmentData {
      time:string;
   }
 
+
+ export interface Quizt {
+   quiz_id:number;
+   deadline:string; // full date and time
+   at:string;
+ }
+
   export const formatLocalTime = (isoString: string): string => {
   const date = new Date(isoString);
   return date.toLocaleString(); // will return local date & time
 };
+
+export const formatLocalDate = (isoString: string): string => {
+  const date = new Date(isoString);
+  return date.toISOString().split("T")[0]; // → "2025-10-18"
+};
+
 
 
 

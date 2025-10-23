@@ -4,11 +4,10 @@ import { Outlet } from 'react-router-dom';
 import {  getMenueItem, MenuItem } from '../Services/Objects';
 import { api } from '../Services/api';
 
-function Main() {
-    const [menues,setMenue]=useState<MenuItem[]>([]);
-    const userinfo = JSON.parse(localStorage.getItem('auth')!);
-
-    useEffect(()=>{
+ function Main() {
+     const [menues,setMenue]=useState<MenuItem[]>([]);
+     const userinfo = JSON.parse(localStorage.getItem('auth')!);
+     useEffect(()=>{
          const fetchMenue = async() =>{
               //etIsLoading(true);
               try {

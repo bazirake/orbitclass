@@ -52,6 +52,7 @@ function Preparequiz() {
     prepared_by: userinfo.user.id,
     total_marks: 0,
     duration: 0,
+    at:'',
     deadline: '',
   });
   const [quizs, setQuizs] = useState<QuizSummary[]>([]);
@@ -231,7 +232,7 @@ function Preparequiz() {
                 ))}
               </select>
             </div>
-            <div className="col-md-3">
+            <div className="col-md-2">
               <label className="form-label">Duration (seconds)</label>
               <input
                 type="number"
@@ -240,12 +241,21 @@ function Preparequiz() {
                 required
               />
             </div>
-            <div className="col-md-3">
+            <div className="col-md-2">
               <label className="form-label">Deadline</label>
               <input
                 type="date"
                 className="form-control"
                 onChange={(e) => setQuiz((prev) => ({ ...prev, deadline: e.target.value }))}
+                required
+              />
+            </div>
+            <div className="col-md-2">
+              <label className="form-label">At</label>
+              <input
+                type="time"
+                className="form-control"
+                onChange={(e) => setQuiz((prev) => ({ ...prev, at: e.target.value }))}
                 required
               />
             </div>

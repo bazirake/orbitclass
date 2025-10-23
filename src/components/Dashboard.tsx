@@ -9,15 +9,12 @@ import { api } from '../Services/api';
 
 
 const Dashboard = () => {
-
   const[totalde,setDeparmentT]=useState<TotalDepartment>();
   const[totalcourse,setCourse]=useState<TotalCourse>();
   const[totalaccount,setAccount]=useState<TotalAccount>();
   const[totalDepart,setTotalDe]=useState<DepartmentData[]>([])
   const[totalResult,setTotalResult]=useState<UsersMarks[]>([])
-const [userResult, setUserResult] = useState<ChartDataInput[]>([
-
-]);
+  const[userResult, setUserResult] = useState<ChartDataInput[]>([]);
  const userinfo = JSON.parse(localStorage.getItem('auth')!);
   const userType = userinfo?.user?.usertype || 0; 
   

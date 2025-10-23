@@ -64,18 +64,18 @@ const router=createBrowserRouter([
          path:'sinfo',
          element:<StudentInfo/>
         },
-        {
+         {
          path:'quiz',
          element:<Quiz/>
-        },
-        {
+         },
+         {
          path:'view',
          element:<Viewcourse/>
-        },
-        {
+         },
+         {
          path:'course',
          element:<Course/>
-        },
+         },
          {
           path:'takequiz',
           element:<Takequiz/>
@@ -84,10 +84,12 @@ const router=createBrowserRouter([
           path:'takequiz/:deptid/:levid',
           element:<StartQuiz/>
          },
+         
          {
-          path:'takequiz/:id/:lid/Quizresult',
-          element:<Sresult/>
-         },
+          path: 'quizresult',
+         element: <Sresult/>
+        },
+       
          {
           path:'setting',
           element:<Settings/>

@@ -21,12 +21,14 @@ function Course() {
   const userType = userinfo?.user?.usertype || 0; // Default to 0 if not found; adjust if user_type is userinfo.user_type
   const canManageFolders = Number(userType) === 1; // ID 1: Can create/delete folders; ID 2: View only
 
-  useEffect(() => {
- // alert(canManageFolders);
+  useEffect(() =>{
+
+    //alert(canManageFolders);
     fetchDepartments();
+     canManageFolders ?  fetchFolderLecture():fetchFolders();
     fetchCourse();
     fetchLevel();
-    fetchFolders();
+    
   }, []); // Removed [folders] dependency to avoid infinite loop; refetch triggered manually
 
   const fetchLevel = async () => {
@@ -50,14 +52,25 @@ function Course() {
   };
 
   const fetchFolders = async () => {
-    try {
+    try{
       const response = await api.get<FolderRes[]>(`/api/folders/${userinfo?.user?.department_name}/${userinfo?.user?.level_id}`);
       setFolders(response.data);
       console.log('Folders:', response.data);
-    } catch (err) {
+    }catch (err) {
       console.error('Failed to fetch folders:', err);
-    }
-  };
+      }
+    };
+
+    
+  const fetchFolderLecture = async () => {
+    try{
+      const response = await api.get<FolderRes[]>(`/api/foldert/${userinfo?.user?.department_name}`);
+      setFolders(response.data);
+      console.log('Folders:', response.data);
+    }catch (err) {
+      console.error('Failed to fetch folders:', err);
+      }
+    };
 
   const fetchCourse = async () => {
     try {
