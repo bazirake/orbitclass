@@ -20,6 +20,7 @@ import Settings from './components/Settings';
 import Takequiz from './components/Takequiz';
 import StartQuiz from './components/StartQuiz';
 import Sresult from './components/Sresult';
+import Quizdetails from './components/Quizdetails';
 
 function App() {
 
@@ -28,50 +29,54 @@ const router=createBrowserRouter([
        path:'/',
        element:<Loginc/>
       },
-      {
+       {
        path:'login',
        element:<Loginc/>
-      },
-      {
+       },
+       {
        path:'main',
        element:<Main/>,
        children:[
-        {
+      {
         path:'Dashboard',
         element:<Dashboard/>
-        },
-        {
+      },
+      {
         path:'chat',
         element:<Chat/>
-        },
-        {
+      },
+      {
         path:'assess',
         element:<Assessment/>
-        },
-        {
+      },
+       {
         path:'timetable',
         element:<Timetable/>
-        },
-        {
+       },
+       {
          path:'notify',
          element:<Notify/>
-        },
-        {
+       },
+       {
          path:'report',
          element:<Report/>
-        },
-        {
+       },
+       {
          path:'sinfo',
          element:<StudentInfo/>
-        },
-         {
+       },
+       {
          path:'quiz',
          element:<Quiz/>
-         },
-         {
+        },
+        {
+         path:'quiz/:qid/:qt/:qd/:qma/:qat',
+         element:<Quizdetails/>
+        },
+        {
          path:'view',
          element:<Viewcourse/>
-         },
+        },
          {
          path:'course',
          element:<Course/>
@@ -84,16 +89,14 @@ const router=createBrowserRouter([
           path:'takequiz/:deptid/:levid',
           element:<StartQuiz/>
          },
-         
          {
-          path: 'quizresult',
-         element: <Sresult/>
-        },
-       
+          path: 'Quizresult',
+          element:<Sresult/>
+         },
          {
           path:'setting',
           element:<Settings/>
-        }
+         }
        ]
       }
      ]

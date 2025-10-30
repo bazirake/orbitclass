@@ -10,6 +10,8 @@ import TimetableTabs from './TimetableTabs';
 import CreateTb from './CreateTb';
 import Preparequiz from './Preparequiz';
 import Viewquiz from './Viewquiz';
+import Listcourse from './Listcourse';
+import ListQuiz from './ListQuiz';
 function Quiz() {
    const [activeTab,setActiveTab] = useState("Prepare");
   return (
@@ -43,7 +45,16 @@ function Quiz() {
         )}
          {activeTab === "View" && (
           <div className="tab-pane fade show active">
-            <Viewquiz/>
+                <div className="container mt-1">
+      {/* Nav Tabs */}
+
+      {/* Tab Content */}
+      <div className="tab-content p-2 border border-top-0">
+          <div className="tab-pane fade show active">
+               <ListQuiz/>
+          </div>
+      </div>
+    </div>
           </div>
          )}
       </div>

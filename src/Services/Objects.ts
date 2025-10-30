@@ -412,15 +412,61 @@ export interface DepartmentData{
    at:string;
  }
 
-  export const formatLocalTime = (isoString: string): string => {
+export const formatLocalTime = (isoString: string): string => {
   const date = new Date(isoString);
-  return date.toLocaleString(); // will return local date & time
+  return date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
 };
+
 
 export const formatLocalDate = (isoString: string): string => {
   const date = new Date(isoString);
-  return date.toISOString().split("T")[0]; // → "2025-10-18"
+  return date.toISOString().split("T")[0];//→"2025-10-18"
 };
+
+
+export interface QuizModel {
+  quiz_id: number;
+  quiz_title: string;
+  quiz_description: string;
+  department_id: number;
+  level_id: number;
+  description: string;
+  course_id: number;
+  prepared_by: number;
+  created_at: string; // ISO datetime string (e.g., "2025-10-29 08:32:07")
+  duration: number;   // duration in minutes or seconds
+  course_name: string;
+  deadline: string;   // date string (e.g., "2025-10-29")
+  total_marks: number;
+  at: string;         // time string (e.g., "09:31:00")
+  preparedby: string; // lecturer name
+  Lectnumber: string; // lecturer number
+  department_name: string;
+}
+
+
+export interface SubjectPerformance {
+  course: string;
+  max_marks: number;
+  obtained_marks: number;
+  overall_percentage: number;
+  overall_grade: string;
+}
+
+export interface StudentReports{
+
+  STUDENTNUMBER: string;
+  student_name: string;
+  student_tel: string;
+  department: string;
+  level_of_study: number;
+  subjects: SubjectPerformance[];
+  grand_total_marks: number;       // ✅ Total of all subjects' max marks
+  total_obtained_marks: number;    // ✅ Total of all obtained marks
+  overall_average: number;   
+  overall_grade: string; 
+  overall_remark: string; // ✅ new field   
+}
 
 
 

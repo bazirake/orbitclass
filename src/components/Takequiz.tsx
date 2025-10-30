@@ -11,6 +11,8 @@ function Takequiz() {
   const location = useLocation();
 
   useEffect(() => {
+     //isTimeActive("08:30")
+   //   alert(isBeforeDeadline("08:30"));
     fetchQuizt();
     fetchQuiz();
   }, []);
@@ -36,7 +38,7 @@ function Takequiz() {
       const quizData = {
         ...response.data,
         deadline: formatLocalDate(response.data.deadline), // YYYY-MM-DD
-        at: formatLocalTime(response.data.at)// 👈 HH:MM:SS format
+        at:response.data.at // HH:MM:SS format
       };
 
       setQuizt(quizData);
@@ -46,47 +48,58 @@ function Takequiz() {
     }
   };
 
-  const startQuiz = (deptid: number, levelid: number) => {
-    navigate(`${location.pathname}/${deptid}/${levelid}`);
-  };
+   const startQuiz = (deptid: number, levelid: number) => {
+     navigate(`${location.pathname}/${deptid}/${levelid}`);
+   };
 
-  // ✅ FIXED: Date comparison (YYYY-MM-DD)
   const isQuizActive = (deadline: string | undefined): boolean => {
-    if (!deadline) return false;
-    const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+     if(!deadline) return false;
+     const now = new Date();
+     const dateString = now.toLocaleDateString('en-US', {
+      timeZone: 'Africa/Kigali',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    });
+    const [month, day, year] = dateString.split('/');
+    const today = `${year}-${month}-${day}`; // YYYY-MM-DD
     return deadline >= today;
   };
 
-  // // ✅ NEW: Time comparison (HH:MM:SS)
-  // const isTimeActive = (time: string | undefined): boolean => {
-  //   if (!time) return false;
-  //   const currentTime = new Date().toLocaleTimeString('en-US', {
-  //     hour12: false,
-  //     hour: '2-digit',
-  //     minute: '2-digit',
-  //     second: '2-digit'
-  //   }); // HH:MM:SS format
-  //   return time >= currentTime;
-  // };
+const isBeforeDeadline = (deadline: string | undefined): boolean => {
+  if (!deadline) return false;
 
-  // 👈 Replace YOUR isTimeActive with this:
-const isTimeActive = (time: string | undefined): boolean => {
-  if (!time) return false;
-  
+  // Get current Kigali time in "HH:mm"
   const now = new Date();
-  const currentTime = now.toLocaleTimeString('en-US', {
-    timeZone: 'Africa/Kigali', // 🇷🇼 Rwanda (CAT = UTC+3)
+  const formatter = new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Africa/Kigali',
     hour12: false,
     hour: '2-digit',
     minute: '2-digit',
-    second: '2-digit'
   });
-  
-  return time >= currentTime;
+  const currentTimeStr = formatter.format(now); // e.g. "14:25"
+
+  // Convert both to total minutes since midnight
+  const [currHour, currMin] = currentTimeStr.split(':').map(Number);
+  const [deadlineHour, deadlineMin] = deadline.split(':').map(Number);
+
+  if (
+    isNaN(currHour) || isNaN(currMin) ||
+    isNaN(deadlineHour) || isNaN(deadlineMin)
+  ) return false;
+
+  const currentMinutes = currHour * 60 + currMin;
+  const deadlineMinutes = deadlineHour * 60 + deadlineMin;
+
+  // ✅ Return true if current time <= deadline
+  return currentMinutes <= deadlineMinutes;
 };
+
+
+
   return (
     <div className="container">
-      {quizt && isQuizActive(quizt.deadline) && isTimeActive(quizt.at) ? (
+      {quizt && isQuizActive(quizt.deadline) && isBeforeDeadline(quizt.at) ? (
         <div className="row justify-content-center">
           <div className="col-md-12">
             <div className="card shadow">
@@ -140,24 +153,21 @@ const isTimeActive = (time: string | undefined): boolean => {
                       </button>
                     </div>
                   </>
-                ) : (
+                   ):(
                   <p className="text-center text-muted">Loading latest quiz...</p>
-                )}
+                  )}
               </div>
             </div>
           </div>
         </div>
-      ) : (
+        ):(
         <div className="row justify-content-center">
           <div className="col-md-12">
             <p className="text-center fw-bold">
-              {quizt && !isQuizActive(quizt.deadline) 
-                ? `Quiz expired on ${quizt.deadline}` 
-                : quizt && !isTimeActive(quizt.at)
-                ? `Quiz available from ${quizt.at}` 
-                : 'No quiz or assignment is available'
-              }
-            </p> 
+             {
+               quizt && `Quiz expired on ${quizt.deadline} at ${quizt.at}`
+             }
+            </p>
           </div>
         </div>
       )}

@@ -79,8 +79,8 @@ function StartQuiz() {
     if (!quiz) return;
 
     try {
-      const quizId = Number(localStorage.getItem("quizid"));
-      const studentId = Number(userinfo?.user?.id);
+      const quizId=Number(localStorage.getItem("quizid"));
+      const studentId=Number(userinfo?.user?.id);
 
       if (!studentId) {
         alert("Invalid user session. Please log in again.");
@@ -88,7 +88,7 @@ function StartQuiz() {
         return;
       }
 
-      const payload = Object.entries(answers).map(([qId, optId]) => ({
+      const payload = Object.entries(answers).map(([qId, optId])=>({
         student_id: studentId,
         question_id: Number(qId),
         option_id: optId,
@@ -99,8 +99,8 @@ function StartQuiz() {
       console.log("✅ Submit response:", response.data);
 
       alert("✅ Answers submitted successfully!");
-      navigate("main/Quizresult");
-    } catch (err: any) {
+      navigate("/main/Quizresult");
+    } catch (err: any){
       console.error("❌ Error submitting answers:", err.response?.data || err.message);
       const errorMessage =
         err.response?.status === 409
@@ -176,10 +176,10 @@ function StartQuiz() {
 
             <div className="card-body">
               <form
-                onSubmit={(e) => {
+                onSubmit={(e)=>{
                   e.preventDefault();
                   handleSubmit();
-                }}
+                 }}
               >
                 {quiz.questions.map((que, index) => (
                   <div key={que.question_id} className="mb-4">

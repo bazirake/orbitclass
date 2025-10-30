@@ -1,0 +1,91 @@
+     .report-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #0d6efd, #0b5ed7);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-weight: 700;
+        }
+        .header p {
+            margin: 0.5rem 0 0;
+            opacity: 0.9;
+        }
+
+        /* Student Info Section (Top, Centered) */
+        .student-info-top {
+            padding: 2rem 1.5rem;
+            background-color: #f1f3f5;
+            text-align: center;
+        }
+        .student-photo {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            margin-bottom: 1rem;
+        }
+        .student-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #212529;
+        }
+        .student-details {
+            color: #495057;
+            font-size: 0.95rem;
+        }
+
+        /* Grades Table */
+        .grades-table th {
+            background-color: #0d6efd;
+            color: white;
+            text-align: center;
+        }
+        .grade-a { background-color: #d4edda; }
+        .grade-b { background-color: #fff3cd; }
+        .grade-c { background-color: #f8d7da; }
+
+        /* Summary Cards */
+        .summary-card {
+            border-left: 5px solid #0d6efd;
+            transition: transform 0.2s;
+        }
+        .summary-card:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Teacher Comment */
+        .teacher-comment {
+            background-color: #f8f9fa;
+            border-left: 4px solid #0d6efd;
+            padding: 1rem;
+            font-style: italic;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .student-photo {
+                width: 100px;
+                height: 100px;
+            }
+            .student-name {
+                font-size: 1.3rem;
+            }
+        }

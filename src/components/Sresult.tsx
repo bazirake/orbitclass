@@ -4,10 +4,10 @@ import { api } from "../Services/api";
 import { useParams } from "react-router-dom";
 
 function Sresult() {
-  const userinfo = JSON.parse(localStorage.getItem("auth") || "{}");
-  const [sresult, setSresult] = useState<StudentResult | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const { id, lid } = useParams(); // if you plan to use them later
+  const userinfo =JSON.parse(localStorage.getItem("auth") || "{}");
+  const [sresult,setSresult]=useState<StudentResult | null>(null);
+  const [error, setError]=useState<string | null>(null);
+  const { id, lid } =useParams(); // if you plan to use them later
 
   useEffect(() => {
     const quizid = Number(localStorage.getItem("quizid") ?? 0);
@@ -23,7 +23,7 @@ function Sresult() {
 
   const fetchStudentResult = async (studentId: number, quizid: number) => {
     try {
-      console.log(`Fetching result for student ${studentId}, quiz ${quizid}`);
+      console.log(`Fetching result for student ${studentId},quiz${quizid}`);
 
       // ✅ Use this if backend uses PATH parameters
       const response = await api.get<StudentResult>(
@@ -37,10 +37,10 @@ function Sresult() {
 
       setSresult(response.data);
       console.log("✅ Result fetched:", response.data);
-    } catch (err: any) {
+      }catch (err: any){
       console.error("❌ Failed to fetch student result:", err.response?.data || err.message);
       setError("Failed while fetching student result. Please check the server route.");
-    }
+     }
   };
 
   if (error) {
@@ -51,7 +51,7 @@ function Sresult() {
     );
   }
 
-  if (!sresult) {
+  if (!sresult){
     return (
       <div className="row justify-content-center mt-4">
         <div className="col-md-6 col-lg-4 text-center">
@@ -64,7 +64,7 @@ function Sresult() {
     );
   }
 
-  return (
+  return(
     <div className="row justify-content-center mt-4">
       <div className="col-md-6 col-lg-4">
         <div className="card shadow">
@@ -98,8 +98,6 @@ function Sresult() {
       </div>
     </div>
   );
-
-
 }
 
 export default Sresult;
