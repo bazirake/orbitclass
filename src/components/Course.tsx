@@ -15,20 +15,17 @@ function Course() {
   const [selectedFolder, setSelectedFolder] = useState<FolderRes | null>(null);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [fparam, setFolderparam] = useState<Folderparam>({ name: '', department: '', course: '', level: '' });
-
   // Get user info from localStorage (assuming same structure as FolderPanel)
   const userinfo = JSON.parse(localStorage.getItem('auth')!);
   const userType = userinfo?.user?.usertype || 0; // Default to 0 if not found; adjust if user_type is userinfo.user_type
   const canManageFolders = Number(userType) === 1; // ID 1: Can create/delete folders; ID 2: View only
 
   useEffect(() =>{
-
-    //alert(canManageFolders);
-    fetchDepartments();
+     //alert(canManageFolders);
+     fetchDepartments();
      canManageFolders ?  fetchFolderLecture():fetchFolders();
-    fetchCourse();
-    fetchLevel();
-    
+     fetchCourse();
+     fetchLevel();
   }, []); // Removed [folders] dependency to avoid infinite loop; refetch triggered manually
 
   const fetchLevel = async () => {
@@ -87,6 +84,7 @@ function Course() {
       const response = await api.post('/api/createfolder', par);
       setFolder(response.data);
       console.log('Folder created:', response.data);
+      fetchFolderLecture();
       fetchFolders(); // Refresh folder list
       setFolderparam({ name: '', department: '', course: '', level: '' }); // Reset form
       setShowForm(false); // Close form

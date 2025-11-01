@@ -5,7 +5,7 @@ import { EMAILS, UploadedFile } from '../Services/Objects';
 interface UploadCoursePanelProps {
   isOpen: boolean;
   onClose: () => void;
-  folder: {
+   folder:{
     id: number;
     name: string;
     department: string;

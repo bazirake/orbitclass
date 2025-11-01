@@ -364,7 +364,6 @@ export interface TotalAccount{
   total:string;
 }
 
-
 // data.ts
 export const sales = [
   { department: "IT", student: 25 },
@@ -379,7 +378,6 @@ export const categories = [
 ];
 
 export const COLORS = ["#4F46E5","#10B981","#F59E0B","#EF4444"];
-
 
 export interface DepartmentData{
   student: number;
@@ -405,7 +403,6 @@ export interface DepartmentData{
      time:string;
   }
 
-
  export interface Quizt {
    quiz_id:number;
    deadline:string; // full date and time
@@ -422,7 +419,6 @@ export const formatLocalDate = (isoString: string): string => {
   const date = new Date(isoString);
   return date.toISOString().split("T")[0];//→"2025-10-18"
 };
-
 
 export interface QuizModel {
   quiz_id: number;
@@ -444,7 +440,6 @@ export interface QuizModel {
   department_name: string;
 }
 
-
 export interface SubjectPerformance {
   course: string;
   max_marks: number;
@@ -454,7 +449,6 @@ export interface SubjectPerformance {
 }
 
 export interface StudentReports{
-
   STUDENTNUMBER: string;
   student_name: string;
   student_tel: string;
