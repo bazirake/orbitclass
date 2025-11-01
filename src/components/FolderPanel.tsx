@@ -37,7 +37,7 @@ const FolderPanel: React.FC<UploadCoursePanelProps> = ({ isOpen, onClose, folder
 
   const notifyStudent = async (recipient: any, subject: any, message: any) => {
     try {
-      await api.post('/api/sendemail', {
+      await api.post('/api/sendemail',{
         to: recipient,
         subject: subject,
         text: message,
@@ -47,12 +47,12 @@ const FolderPanel: React.FC<UploadCoursePanelProps> = ({ isOpen, onClose, folder
     }
   };
 
-  const fetchEmails = async (dep: any, leid: any) => {
-    try {
-      const response = await api.get<string[]>(`/emails?level_id=${leid}&department_name=${dep}`);
-      localStorage.setItem('emails', JSON.stringify(response.data));
-      console.log('Emails:', response.data);
-      setPemail(response.data);
+  const fetchEmails =async(dep:any,leid:any)=>{
+     try{
+       const response = await api.get<string[]>(`/emails?level_id=${leid}&department_name=${dep}`);
+       localStorage.setItem('emails', JSON.stringify(response.data));
+       console.log('Emails:', response.data);
+       setPemail(response.data);
     } catch (err) {
       console.error('Failed to fetch emails:', err);
     }
@@ -83,6 +83,7 @@ const FolderPanel: React.FC<UploadCoursePanelProps> = ({ isOpen, onClose, folder
       });
       setUploadres(res.data.message);
       fetchCourseFiles(folder.id);
+      //alert(folder.level+','+folder.department)
       fetchEmails(folder.department, folder.level);
       const storedEmails: string[] = (() => {
         const item = localStorage.getItem('emails');
@@ -97,7 +98,7 @@ const FolderPanel: React.FC<UploadCoursePanelProps> = ({ isOpen, onClose, folder
       notifyStudent(
         storedEmails,
         'KDU ORBIT CLASS COURSE NOTIFICATION',
-        `Dear Student(s) ${folder.course} has been uploaded. Please! Visit KDU Orbit class system to download course files`
+        `Dear Student(s), ${folder.course} has been uploaded. Please! Visit KDU Orbit class system to download course files`
       );
       alert(res.data.message);
       setSelectedFile(null);
