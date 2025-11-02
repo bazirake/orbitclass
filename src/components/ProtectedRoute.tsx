@@ -1,13 +1,19 @@
+import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
-const ProtectedRoute = () => {
-  //Check if user is logged in
-  const userinfo = JSON.parse(localStorage.getItem('auth')!); // or "token", depending on your login logic
-  //If not logged in,redirect to login page
-  if(!userinfo) {
+
+interface ProtectedRouteProps {
+  children?: React.ReactNode;
+}
+
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
+  const isAuthenticated = JSON.parse(localStorage.getItem('auth')!); // or your auth check
+
+  if (!isAuthenticated) {
     return <Navigate to="/" replace />;
   }
-  //Otherwise, render the child route content
-  return <Outlet />;
+
+  // ✅ If this route wraps nested routes (via Outlet), use children if passed
+  return children ? <>{children}</> : <Outlet />;
 };
 
 export default ProtectedRoute;

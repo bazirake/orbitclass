@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { api } from '../Services/api';
 import { formatLocalDate, formatLocalTime, Quizt, QuizWithQuestions } from '../Services/Objects';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useNotify } from './NotifyProvider';
 
 function Takequiz() {
   const [quiz, setQuiz] = useState<QuizWithQuestions | null>(null);
@@ -9,10 +10,12 @@ function Takequiz() {
   const navigate = useNavigate();
   const userinfo = JSON.parse(localStorage.getItem('auth')!);
   const location = useLocation();
+  const { takequizReport } =useNotify();
 
   useEffect(() => {
      //isTimeActive("08:30")
    //   alert(isBeforeDeadline("08:30"));
+   takequizReport("takequiz"); // Emit event when page is visited
     fetchQuizt();
     fetchQuiz();
   }, []);

@@ -5,6 +5,9 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import "../components/menu.css"
 import { api } from '../Services/api';
 
+import NotifyProvider from "../components/NotifyProvider";
+import NotificationBell from "../components/NotificationBell";
+
 interface SidebarItem {
    label:string;
    href:string;
@@ -41,6 +44,14 @@ const Layout: React.FC<LayoutProps> = ({sidebarItems,children}) => {
           <a className="navbar-brand" href="#">
             KDU-OrbitClass
           </a>
+          
+          
+     <NotifyProvider>
+      <div>
+        <NotificationBell/>
+      </div>
+    </NotifyProvider>
+
           <div className="dropdown ms-auto">
   <button
     className="btn dropdown-toggle d-flex align-items-center"
@@ -70,8 +81,8 @@ const Layout: React.FC<LayoutProps> = ({sidebarItems,children}) => {
     </li>
   </ul>
 </div>
-        </div>
-      </nav>
+</div>
+</nav>
 
       {/* Main Area */}
       <div className="d-flex flex-grow-1">
@@ -98,18 +109,16 @@ const Layout: React.FC<LayoutProps> = ({sidebarItems,children}) => {
       ))}
     </ul>
         </div>
-
         {/* Content */}
         <div className="flex-grow-1 d-flex flex-column">
           <main className="flex-grow-1 p-4">{children}</main>
            {/* Footer */}
           <footer className="buttonbar-color text-light text-center py-3">
-            &copy;{new Date().getFullYear()} KDU-OrbitClass.All rights reserved.
+             &copy;{new Date().getFullYear()} KDU-OrbitClass.All rights reserved.
           </footer>
         </div>
       </div>
     </div>
   );
 };
-
 export default Layout;

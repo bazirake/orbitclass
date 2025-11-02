@@ -1,5 +1,5 @@
 
-import React from 'react'
+import React, { useEffect } from 'react'
   import { useState } from 'react'
 // import "./timetable.css"
 // import 'bootstrap/dist/css/bootstrap.min.css';
@@ -12,8 +12,14 @@ import Preparequiz from './Preparequiz';
 import Viewquiz from './Viewquiz';
 import Listcourse from './Listcourse';
 import ListQuiz from './ListQuiz';
+import { useNotify } from './NotifyProvider';
 function Quiz() {
    const [activeTab,setActiveTab] = useState("Prepare");
+    const{assignquizReport}=useNotify();
+   
+    useEffect(()=>{
+     assignquizReport("viewquiz")
+    },[]);
   return (
 
     <div className="container mt-2">

@@ -2,13 +2,14 @@
 import React, { useEffect, useState } from 'react'
 import { api } from '../Services/api';
 import { QuizWithQuestions, QuizzesApiResponse, getApiLevel } from '../Services/Objects';
+import { useNotify } from './NotifyProvider';
 
-function Viewquiz() {
- const[quiz,setQuiz]=useState<QuizWithQuestions[]>([])
-
-
-   useEffect(()=>{
-    fetchQuiz()
+  function Viewquiz() {
+   const[quiz,setQuiz]=useState<QuizWithQuestions[]>([])
+  
+    useEffect(()=>{
+      
+      fetchQuiz()
      },[])
            const fetchQuiz = async () => {
                  //etIsLoading(true);

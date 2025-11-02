@@ -1,15 +1,20 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import "./timetable.css"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import TimetableTabs from './TimetableTabs';
 import CreateTb from './CreateTb';
+import { useNotify } from './NotifyProvider';
 
 function Timetable() {
   const [activeTab, setActiveTab] = useState("Prepare");
   const userinfo = JSON.parse(localStorage.getItem('auth')!);
   const userType = userinfo?.user?.usertype || 0;
   const canViewTimeTable = Number(userType) === 1;
+   const { visitMenu } = useNotify();
+ useEffect(() => {
+    visitMenu("timetable"); // Emit event when page is visited
+  }, []);
 
   return (
     <div className="container mt-2">

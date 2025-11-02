@@ -1,5 +1,5 @@
 
-import React from 'react'
+import React, { useEffect } from 'react'
   import { useState } from 'react'
 // import "./timetable.css"
 // import 'bootstrap/dist/css/bootstrap.min.css';
@@ -12,8 +12,15 @@ import Preparequiz from './Preparequiz';
 import Viewquiz from './Viewquiz';
 import StudentResult from './StudentResult';
 import StudentBasic from './StudentBasic';
+import { useNotify } from './NotifyProvider';
 function StudentInfo() {
-   const [activeTab,setActiveTab] = useState("sresult");
+  const [activeTab,setActiveTab] = useState("sresult");
+  const { studentinfoReport } =useNotify();
+    
+   useEffect(()=>{
+        studentinfoReport("studentinfo");//Emit event when page is visited
+     },[])
+     
   return (
     <div className="container mt-2">
       <h4 className="text-center mb-1">Student information panel</h4>

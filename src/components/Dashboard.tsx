@@ -5,6 +5,7 @@ import Layout from './Layout';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Bar, BarChart, Legend } from 'recharts';
 import { categories, COLORS, ChartDataInput, DepartmentData,  sales, TotalAccount, TotalCourse, TotalDepartment, UsersMarks } from '../Services/Objects';
 import { api } from '../Services/api';
+import NotifyProvider, { useNotify } from './NotifyProvider';
 
 
 
@@ -17,6 +18,7 @@ const Dashboard = () => {
   const[userResult, setUserResult] = useState<ChartDataInput[]>([]);
  const userinfo = JSON.parse(localStorage.getItem('auth')!);
   const userType = userinfo?.user?.usertype || 0; 
+  const {dashboardReport} = useNotify();
   
         const fetchTotalDepartment = async () => {
              //etIsLoading(true);
@@ -76,6 +78,7 @@ const Dashboard = () => {
 
      
           useEffect(()=>{
+            dashboardReport("dashboard");
             fetchDepartmentStat();
           //  fetchResultStat();
           //   console.log("helloxxx",totalResult)

@@ -11,6 +11,7 @@ import { ApiResponsedepartment, ApiResponsedepartments, Department, Departments,
 import { api } from '../Services/api';
 import { data } from 'react-router-dom';
 import Course from './Course';
+import { useNotify } from './NotifyProvider';
 
 const socket = io('http://localhost:3001');
 
@@ -29,6 +30,7 @@ function Chat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [userDepartment, setUserDepartment] = useState(0); // User's department ID
+   const { chatReport } =useNotify();
 
   // Get user's department from localStorage (assuming userinfo.user.department_id exists)
   // If not available, fetch it via API (see fetchUserDepartment function)
@@ -60,6 +62,7 @@ function Chat() {
   });
 
   useEffect(() => {
+    chatReport("chat")
     localStorage.setItem('userid', userinfo?.user?.id || '');
     fetchUserDepartment(); // Fetch user's department first
     fetchDepartments();

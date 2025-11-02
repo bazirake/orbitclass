@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Department, Level, StudentQuizResult, Sparams, Courses, Folderparam, FolderRes, getApiLevel } from '../Services/Objects';
 import { api } from '../Services/api';
 import FolderPanel from './FolderPanel';
+import { useNotify } from './NotifyProvider';
 
 function Course() {
   const [department, setDepartment] = useState<Department[]>([]);
@@ -19,8 +20,9 @@ function Course() {
   const userinfo = JSON.parse(localStorage.getItem('auth')!);
   const userType = userinfo?.user?.usertype || 0; // Default to 0 if not found; adjust if user_type is userinfo.user_type
   const canManageFolders = Number(userType) === 1; // ID 1: Can create/delete folders; ID 2: View only
-
+ const { courseReport } =useNotify();
   useEffect(() =>{
+    courseReport("course")
      //alert(canManageFolders);
      fetchDepartments();
      canManageFolders ?  fetchFolderLecture():fetchFolders();

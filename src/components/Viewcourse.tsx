@@ -1,5 +1,5 @@
 
-import React from 'react'
+import React, { useEffect } from 'react'
   import { useState } from 'react'
 // import "./timetable.css"
 // import 'bootstrap/dist/css/bootstrap.min.css';
@@ -13,8 +13,13 @@ import Viewquiz from './Viewquiz';
 import StudentResult from './StudentResult';
 import StudentBasic from './StudentBasic';
 import Listcourse from './Listcourse';
+import { useNotify } from './NotifyProvider';
 function Viewcourse() {
-   const [activeTab,setActiveTab] = useState("sresult");
+ const [activeTab,setActiveTab] = useState("sresult");
+ const {viewcourseReport} = useNotify();
+   useEffect(()=>{
+    viewcourseReport("viewourse")
+   },[])
   return (
     <div className="container mt-2">
       <h4 className="text-center mb-1">Course information panel</h4>

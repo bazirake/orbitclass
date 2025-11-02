@@ -1,9 +1,10 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import "../components/report.css";
 import { StudentReports } from '../Services/Objects';
 import { api } from '../Services/api';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { useNotify } from './NotifyProvider';
 
 interface Subject {
   name: string;
@@ -26,6 +27,12 @@ function Report() {
   const [reports, setReports] = useState<StudentReports | null>(null);
 
   // Ref for PDF capture
+
+     const { visitReport } = useNotify();
+      useEffect(() => {
+      visitReport("reports"); // Emit event when page is visited
+    }, []);
+  
   const reportRef = useRef<HTMLDivElement>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
