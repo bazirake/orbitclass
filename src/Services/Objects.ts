@@ -197,7 +197,6 @@ export interface Quiz {
   prepared_by: number;  
   total_marks: number;  
   duration:number;
-  at:string;
   deadline:string 
 }
 
@@ -415,10 +414,43 @@ export const formatLocalTime = (isoString: string): string => {
 };
 
 
+// export const formatLocalDate = (isoString: string): string => {
+//   const date = new Date(isoString);
+//   return date.toISOString().split("T")[0];//→"2025-10-18"
+// };
+
+// export const formatLocalDate = (isoString: string): string => {
+//   const date = new Date(isoString);
+//   const yyyy = date.getFullYear();
+//   const mm = String(date.getMonth() + 1).padStart(2, "0");
+//   const dd = String(date.getDate()).padStart(2, "0");
+//   const hh = String(date.getHours()).padStart(2, "0");
+//   const min = String(date.getMinutes()).padStart(2, "0");
+//   const ss = String(date.getSeconds()).padStart(2, "0");
+//   return `${yyyy}-${mm}-${dd} ${hh}:${min}:${ss}`;
+// };
+
 export const formatLocalDate = (isoString: string): string => {
   const date = new Date(isoString);
-  return date.toISOString().split("T")[0];//→"2025-10-18"
+
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, "0");
+  const dd = String(date.getDate()).padStart(2, "0");
+
+  let hours = date.getHours();
+  const ampm = hours >= 12 ? "PM" : "AM";
+
+  // Convert to 12-hour format
+  hours = hours % 12 || 12;
+
+  const hh = String(hours).padStart(2, "0");
+  const min = String(date.getMinutes()).padStart(2, "0");
+  const ss = String(date.getSeconds()).padStart(2, "0");
+
+  return `${yyyy}-${mm}-${dd} ${hh}:${min}:${ss} ${ampm}`;
 };
+
+
 
 export interface QuizModel {
   quiz_id: number;
@@ -434,7 +466,6 @@ export interface QuizModel {
   course_name: string;
   deadline: string;   // date string (e.g., "2025-10-29")
   total_marks: number;
-  at: string;         // time string (e.g., "09:31:00")
   preparedby: string; // lecturer name
   Lectnumber: string; // lecturer number
   department_name: string;
@@ -455,11 +486,11 @@ export interface StudentReports{
   department: string;
   level_of_study: number;
   subjects: SubjectPerformance[];
-  grand_total_marks: number;       // ✅ Total of all subjects' max marks
-  total_obtained_marks: number;    // ✅ Total of all obtained marks
+  grand_total_marks:number;       // ✅ Total of all subjects' max marks
+  total_obtained_marks:number;    // ✅ Total of all obtained marks
   overall_average: number;   
   overall_grade: string; 
-  overall_remark: string; // ✅ new field   
+  overall_remark: string;//✅ new field   
 }
 
 

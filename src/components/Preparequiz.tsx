@@ -52,7 +52,6 @@ function Preparequiz() {
     prepared_by: userinfo.user.id,
     total_marks: 0,
     duration: 0,
-    at:'',
     deadline: '',
   });
   const [quizs, setQuizs] = useState<QuizSummary[]>([]);
@@ -125,6 +124,7 @@ function Preparequiz() {
     }
   };
 
+
   const resetQuestionForm = () => {
     setQuizas({ quiz_id: 0, question_text: '', marks: 0 });
     setMessageq({ message: '', question_id: '' });
@@ -172,7 +172,7 @@ function Preparequiz() {
                 type="text"
                 value={quize.quiz_description}
                 className="form-control"
-                onChange={(e) => setQuiz((prev) => ({ ...prev, quiz_description: e.target.value }))}
+                onChange={(e) =>setQuiz((prev) => ({...prev, quiz_description: e.target.value}))}
                 required
               />
               <input type="text" value={quize.prepared_by} className="form-control" hidden />
@@ -182,7 +182,7 @@ function Preparequiz() {
               <input
                 type="number"
                 className="form-control"
-                onChange={(e) => setQuiz((prev) => ({ ...prev, total_marks: Number(e.target.value) }))}
+                onChange={(e)=>setQuiz((prev)=>({...prev,total_marks:Number(e.target.value) }))}
                 required
               />
             </div>
@@ -190,7 +190,7 @@ function Preparequiz() {
               <label className="form-label">Department</label>
               <select
                 className="form-select"
-                onChange={(e) => setQuiz((prev) => ({ ...prev, department_id: Number(e.target.value) }))}
+                onChange={(e)=>setQuiz((prev)=>({ ...prev, department_id: Number(e.target.value) }))}
                 required
               >
                 <option value="">Choose dept...</option>
@@ -233,7 +233,7 @@ function Preparequiz() {
               </select>
             </div>
             <div className="col-md-2">
-              <label className="form-label">Duration (seconds)</label>
+              <label className="form-label">Duration(seconds)</label>
               <input
                 type="number"
                 className="form-control"
@@ -241,24 +241,16 @@ function Preparequiz() {
                 required
               />
             </div>
-            <div className="col-md-2">
+            <div className="col-md-4">
               <label className="form-label">Deadline</label>
               <input
-                type="date"
+                type="datetime-local"
                 className="form-control"
-                onChange={(e) => setQuiz((prev) => ({ ...prev, deadline: e.target.value }))}
+                onChange={(e) =>setQuiz((prev) =>({...prev,deadline: e.target.value}))}
                 required
               />
             </div>
-            <div className="col-md-2">
-              <label className="form-label">At</label>
-              <input
-                type="time"
-                className="form-control"
-                onChange={(e) => setQuiz((prev) => ({ ...prev, at: e.target.value }))}
-                required
-              />
-            </div>
+
           </div>
           <button type="submit" className="btn btn-primary d-block mx-auto">
             Create Quiz
@@ -270,7 +262,7 @@ function Preparequiz() {
         onSubmit={async (e) => {
           e.preventDefault();
           try {
-            const response = await api.post('/quiz-questions', quizas);
+            const response = await api.post('/quiz-questions',quizas);
             setMessageq(response.data);
             fetchOneque(response.data.question_id);
             resetQuestionForm(); // Reset form after successful submission

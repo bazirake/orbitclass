@@ -1,71 +1,92 @@
+import React, { useEffect, useState } from "react";
+import Preparequiz from "./Preparequiz";
+import ListQuiz from "./ListQuiz";
+import { useNotify } from "./NotifyProvider";
 
-import React, { useEffect } from 'react'
-  import { useState } from 'react'
-// import "./timetable.css"
-// import 'bootstrap/dist/css/bootstrap.min.css';
-// import 'bootstrap-icons/font/bootstrap-icons.css';
-// import 'bootstrap/dist/css/bootstrap.min.css'; 
-// import 'bootstrap/dist/js/bootstrap.bundle.min';
-import TimetableTabs from './TimetableTabs';
-import CreateTb from './CreateTb';
-import Preparequiz from './Preparequiz';
-import Viewquiz from './Viewquiz';
-import Listcourse from './Listcourse';
-import ListQuiz from './ListQuiz';
-import { useNotify } from './NotifyProvider';
+// Safely get user info from localStorage
+const getUserInfo = () => {
+  try {
+    const authData = localStorage.getItem("auth");
+    if (!authData) return null;
+    const parsed = JSON.parse(authData);
+    return parsed?.user || null;
+  } catch (error) {
+    console.error("Failed to parse auth data", error);
+    return null;
+  }
+};
+
 function Quiz() {
-   const [activeTab,setActiveTab] = useState("Prepare");
-    const{assignquizReport}=useNotify();
-   
-    useEffect(()=>{
-     assignquizReport("viewquiz")
-    },[]);
-  return (
+  const user = getUserInfo();
+  const userType = Number(user?.usertype);
+  const isTeacher = userType === 1;
 
+  // Default tab based on the user type
+  const [activeTab, setActiveTab] = useState<"Prepare" | "View">(
+    isTeacher ? "Prepare" : "View"
+  );
+
+  const { assignquizReport } = useNotify();
+
+  useEffect(() => {
+    assignquizReport("viewquiz");
+  }, [assignquizReport]);
+
+  return (
     <div className="container mt-2">
-      <h4 className="text-center mb-2">Prepare quiz/Assignment</h4>
-      {/* Nav Tabs */}
-      <ul className="nav nav-tabs">
-        <li className="nav-item">
-          <button
-            className={`nav-link ${activeTab === "Prepare" ? "active" : ""}`}
-            onClick={()=>setActiveTab("Prepare")}>
-            Prepare
-          </button>
-        </li>
+      <h4 className="text-center mb-4">Prepare Quiz / View Quiz & Assignment</h4>
+
+      {/* Navigation Tabs */}
+      <ul className="nav nav-tabs mb-3">
+        {isTeacher && (
+          <li className="nav-item">
+            <button
+              className={`nav-link ${activeTab === "Prepare" ? "active" : ""}`}
+              onClick={() => setActiveTab("Prepare")}
+            >
+              Prepare Quiz
+            </button>
+          </li>
+        )}
+
         <li className="nav-item">
           <button
             className={`nav-link ${activeTab === "View" ? "active" : ""}`}
-            onClick={() => setActiveTab("View")}>
-            View
+            onClick={() => setActiveTab("View")}
+          >
+            {isTeacher ? "View All Quizzes" : "My Quizzes"}
           </button>
         </li>
       </ul>
 
       {/* Tab Content */}
-      <div className="tab-content p-3 border border-top-0">
-        {activeTab === "Prepare" && (
+      <div className="tab-content p-3 border border-top-0 bg-white rounded-bottom">
+        
+        {/* Prepare Tab (Teachers Only) */}
+        {activeTab === "Prepare" && isTeacher && (
           <div className="tab-pane fade show active">
-            <Preparequiz/>
+            <Preparequiz />
           </div>
         )}
-         {activeTab === "View" && (
-          <div className="tab-pane fade show active">
-                <div className="container mt-1">
-      {/* Nav Tabs */}
 
-      {/* Tab Content */}
-      <div className="tab-content p-2 border border-top-0">
+        {/* View Tab (Everyone) */}
+        {activeTab === "View" && (
           <div className="tab-pane fade show active">
-               <ListQuiz/>
+            <ListQuiz />
           </div>
-      </div>
-    </div>
+        )}
+
+        {/* Student tries to access Prepare */}
+        {activeTab === "Prepare" && !isTeacher && (
+          <div className="text-center py-5 text-muted">
+            <i className="bi bi-lock-fill fs-1 mb-3"></i>
+            <p className="fs-5">You don't have permission to prepare quizzes.</p>
+            <small>Only teachers can create and manage quizzes.</small>
           </div>
-         )}
+        )}
       </div>
     </div>
   );
 }
 
-export default Quiz
+export default Quiz;

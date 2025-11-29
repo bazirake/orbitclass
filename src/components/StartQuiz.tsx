@@ -33,11 +33,11 @@ function StartQuiz() {
         `/api/quizzes/${department_id}/${level_id}`
       );
 
-      const selectedQuiz = response.data;
-      if (!selectedQuiz || !selectedQuiz.quiz_id){
-        setError("No quiz found for the selected department and level.");
-        return;
-      }
+      const selectedQuiz=response.data;
+       if(!selectedQuiz || !selectedQuiz.quiz_id){
+           setError("No quiz found for the selected department and level.");
+          return;
+        }
 
       setQuiz(selectedQuiz);
       localStorage.setItem("quizid", selectedQuiz.quiz_id.toString());
@@ -113,7 +113,7 @@ function StartQuiz() {
   // ✅ Auto submit when time ends
   const handleComplete = async () => {
     setIsTimeUp(true);
-    const quizId = Number(localStorage.getItem("quizid"));
+    const quizId=Number(localStorage.getItem("quizid"));
     if (quizId) {
       await updateDurationQuiz(quizId);
       await handleSubmit(); // Auto-submit
@@ -179,15 +179,13 @@ function StartQuiz() {
                 onSubmit={(e)=>{
                   e.preventDefault();
                   handleSubmit();
-                 }}
-              >
+                 }}>
                 {quiz.questions.map((que, index) => (
                   <div key={que.question_id} className="mb-4">
                     <h5>
                       {index + 1}. {que.question_text}{" "}
                       <span className="ms-2 text-muted">/{que.marks}</span>
                     </h5>
-
                     {que.options.map((opt) => (
                       <div className="form-check" key={opt.option_id}>
                         <input
@@ -204,7 +202,6 @@ function StartQuiz() {
                     ))}
                   </div>
                 ))}
-
                 {!isTimeUp && (
                   <div className="d-flex mt-3">
                     <button
