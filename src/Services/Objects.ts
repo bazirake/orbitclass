@@ -493,6 +493,21 @@ export interface StudentReports{
   overall_remark: string;//✅ new field   
 }
 
+export interface Assess {
+  quiz_id: number;
+  quiz_title: string;
+  quiz_description: string;
+  department_id: number;
+  level_id: number;
+  course_id: number;
+  prepared_by: number;
+  created_at: string;   // or Date if you will parse it
+  duration: number;
+  deadline: string;     // or Date if parsed
+  total_marks: number;
+}
+
+
 
 
 
