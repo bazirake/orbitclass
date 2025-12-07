@@ -55,8 +55,8 @@ function Preparequiz() {
     deadline: '',
   });
   const [quizs, setQuizs] = useState<QuizSummary[]>([]);
-  const [quizas, setQuizas] = useState<QuizQuestion>({ quiz_id: 0, question_text: '', marks: 0 });
-  const [messageq, setMessageq] = useState({ message: '', question_id: '' });
+  const [quizas, setQuizas] = useState<QuizQuestion>({quiz_id: 0, question_text: '', marks: 0 });
+  const [messageq, setMessageq] = useState({message: '', question_id: '' });
   const [option, setOption] = useState<QuestionOption>({ question_id: 0, option_text: '', is_correct: false });
   const [optionres, setOptionres] = useState({ message: '', option_id: 0 });
 

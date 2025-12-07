@@ -13,7 +13,7 @@ function Course() {
   const [courses, setCourses] = useState<Courses[]>([]);
   const [fres, setFolder] = useState({ message: '', folderId: '' });
   const [showForm, setShowForm] = useState(false);
-  const [selectedFolder, setSelectedFolder] = useState<FolderRes | null>(null);
+  const [selectedFolder, setSelectedFolder] = useState<FolderRes|null>(null);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [fparam, setFolderparam] = useState<Folderparam>({ name: '', department: '', course: '', level: '' });
   // Get user info from localStorage (assuming same structure as FolderPanel)
@@ -194,14 +194,12 @@ function Course() {
               </div>
             ))}
           </div>
-
           {/* Upload Course Panel */}
           <FolderPanel
             isOpen={isPanelOpen}
-            onClose={() => setIsPanelOpen(false)}
+            onClose={() =>setIsPanelOpen(false)}
             folder={selectedFolder}
           />
-
           {/* Form popup for folder creation */}
           {showForm && canManageFolders && (
             <div
@@ -234,33 +232,33 @@ function Course() {
                     }
                     required
                   >
-                    <option value="">Department</option>
-                    {department.map((item) => (
-                      <option key={item.department_name} value={item.department_name}>
+                  <option value="">Department</option>
+                    {department.map((item)=>(
+                    <option key={item.department_name} value={item.department_name}>
                         {item.department_name}
-                      </option>
+                    </option>
                     ))}
                   </select>
                   <select
                     className="form-select mb-2"
                     value={fparam.course}
-                    onChange={(e) =>
-                      setFolderparam((prev) => ({ ...prev, course: e.target.value }))
+                    onChange={(e)=>
+                      setFolderparam((prev) =>({...prev, course: e.target.value}))
                     }
                     required
                   >
                     <option value="">Course</option>
-                    {courses.map((item) =>(
+                    {courses.map((item)=>(
                       <option key={item.description} value={item.description}>
                         {item.description}
-                      </option>
+                    </option>
                     ))}
                   </select>
                   <select
                     className="form-select mb-3"
                     value={fparam.level}
                     onChange={(e) =>
-                      setFolderparam((prev) => ({ ...prev, level: e.target.value }))
+                      setFolderparam((prev)=>({...prev, level: e.target.value}))
                     }
                     required
                   >

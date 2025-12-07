@@ -72,7 +72,7 @@ function Quiz() {
         {/* View Tab (Everyone) */}
         {activeTab === "View" && (
           <div className="tab-pane fade show active">
-            <ListQuiz />
+            <ListQuiz/>
           </div>
         )}
 

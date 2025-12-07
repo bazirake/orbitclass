@@ -37,7 +37,7 @@ function Takequiz() {
 
       const quizData = {
         ...response.data,
-        deadline: formatLocalDate(response.data.deadline) // formatted with AM/PM
+        deadline:formatLocalDate(response.data.deadline) // formatted with AM/PM
       };
 
       setQuizt(quizData);
@@ -54,9 +54,9 @@ function Takequiz() {
   const isQuizActive = (deadline: string | undefined): boolean => {
     if (!deadline) return false;
 
-    // Convert formatted deadline back to Date object
+   
     const deadlineDate = new Date(deadline.replace(/-/g, '/')); 
-    // Replace "-" with "/" for Safari compatibility
+  
     const now = new Date();
 
     return deadlineDate.getTime() > now.getTime();

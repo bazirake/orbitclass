@@ -1,32 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Assessment.css"; // custom styling
-import { Assess, formatLocalDate } from "../Services/Objects";
+import { Assess, Department, formatLocalDate, formatLocalDates, QuizAssess } from "../Services/Objects";
 import { api } from "../Services/api";
 
 function Assessment() {
 
-  const[assess,setAssess]=useState<Assess[]>([]);                  
+              
    const userinfo = JSON.parse(localStorage.getItem('auth')!);
+  const[assess,setAssess]=useState<QuizAssess[]>([]);
 
+  useEffect(()=>{
+    fetchAssessment();
+  },[]);
 
-     const fetchQuizes = async () => {
-           //etIsLoading(true);
+         const fetchAssessment = async () => {
+          //etIsLoading(true);
             try{
-               const response = await api.get<Assess[]>(
-                      `/quizzes/complete/3/3` // replace with your API URL
-               );
-                 const quizData = response.data.map((quiz: any) => ({
-                 ...quiz,
-                  created_at: formatLocalDate(quiz.created_at), // format date for each quiz
-                  }));
-              setAssess(quizData); // set API array to state
-                   console.log("Assess",response.data);
-            }catch (err){
-                   // setError("Failed to fetch departments");
-                  } finally {
-                    //setIsLoading(false);
-                  }
-                }
+                  const response = await api.get<QuizAssess[]>(
+                  "/api/quizzes/ass?department_id=3&level_id=2" // replace with your API URL
+              );
+             setAssess(response.data); // set API array to state
+                  console.log("table",response.data);
+           }catch (err){
+                  // setError("Failed to fetch departments");
+                 } finally {
+                   //setIsLoading(false);
+                 }
+               }
+
   return (
     <div className="container py-2 py-lg-2">
       {/* Header */}
@@ -77,96 +78,49 @@ function Assessment() {
         <div className="tab-pane fade show active" id="my-assessments">
           <div className="row g-4">
             {/* Assessment Card 1 */}
-            <div className="col-md-6 col-lg-4">
+            
+
+              {
+                assess.map((item)=>
+                <div className="col-md-6 col-lg-4">
               <div className="card border-0 shadow-sm h-100 hover-lift">
                 <div className="card-body p-4">
                   <div className="d-flex justify-content-between mb-3">
-                    <span className="badge bg-danger fs-6">Due Tomorrow</span>
-                    <span className="text-muted small">Math 101</span>
+                    <span className="badge bg-danger fs-6">Due {formatLocalDates(item.deadline)}</span>
+                    <span className="text-muted small">{item.course_name}</span>
                   </div>
 
-                  <h5 className="fw-bold">Midterm Quiz - Algebra</h5>
+                  <h5 className="fw-bold">{item.quiz_title}</h5>
                   <p className="text-muted small mb-3">
-                    25 Questions • Multiple Choice & Short Answer
+                   <b>{item.totalq}</b> {item.course_name}
                   </p>
 
                   <div className="d-flex align-items-center text-warning mb-3">
                     <i className="bi bi-clock me-2"></i>
-                    <span>45 minutes</span>
+                    <span>{item.duration} minutes</span>
                   </div>
 
                   <div className="d-grid">
-                    <button className="btn btn-outline-primary btn-sm">Start Assessment</button>
+                    <button 
+                    className="btn btn-outline-primary btn-sm" onClick={()=>{
+                      alert('Assessment Comming soon')
+                    }}>Start Assessment</button>
                   </div>
                 </div>
 
                 <div className="card-footer bg-transparent border-0">
                   <small className="text-danger fw-semibold">
-                    Due: 30 Nov 2025, 11:59 PM
+                    Due:{formatLocalDate(item.deadline)}
                   </small>
                 </div>
               </div>
             </div>
+                )
+              }
 
-            {/* Assessment Card 2 */}
-            <div className="col-md-6 col-lg-4">
-              <div className="card border-0 shadow-sm h-100 hover-lift">
-                <div className="card-body p-4">
-                  <div className="d-flex justify-content-between mb-3">
-                    <span className="badge bg-warning text-dark fs-6">Pending</span>
-                    <span className="text-muted small">Physics 201</span>
-                  </div>
 
-                  <h5 className="fw-bold">Lab Report Submission</h5>
-                  <p className="text-muted small mb-3">
-                    Upload PDF report + data sheet
-                  </p>
 
-                  <div className="d-flex align-items-center text-primary mb-3">
-                    <i className="bi bi-file-earmark-arrow-up me-2"></i>
-                    <span>File Upload</span>
-                  </div>
 
-                  <div className="d-grid">
-                    <button className="btn btn-outline-success btn-sm">Upload Now</button>
-                  </div>
-                </div>
-
-                <div className="card-footer bg-transparent border-0">
-                  <small className="text-muted">Due: 5 Dec 2025</small>
-                </div>
-              </div>
-            </div>
-
-            {/* Assessment Card 3 */}
-            <div className="col-md-6 col-lg-4">
-              <div className="card border-0 shadow-sm h-100 hover-lift">
-                <div className="card-body p-4">
-                  <div className="d-flex justify-content-between mb-3">
-                    <span className="badge bg-success fs-6">Open</span>
-                    <span className="text-muted small">English 102</span>
-                  </div>
-
-                  <h5 className="fw-bold">Essay: Climate Change</h5>
-                  <p className="text-muted small mb-3">
-                    800–1000 words • APA Format
-                  </p>
-
-                  <div className="d-flex align-items-center text-info mb-3">
-                    <i className="bi bi-pencil-square me-2"></i>
-                    <span>Long Answer</span>
-                  </div>
-
-                  <div className="d-grid">
-                    <button className="btn btn-outline-info btn-sm">Start Writing</button>
-                  </div>
-                </div>
-
-                <div className="card-footer bg-transparent border-0">
-                  <small className="text-muted">Due: 12 Dec 2025</small>
-                </div>
-              </div>
-            </div>
 
           </div>
         </div>
@@ -174,7 +128,7 @@ function Assessment() {
         {/* ============== Completed TAB (Mock Data) ============== */}
         <div className="tab-pane fade" id="completed">
           <div className="row g-4">
-  {assess.map((item, index) => (
+  {/* {assess.map((item, index) => (
     <div key={item.quiz_id || index} className="col-md-6 col-lg-4">
       <div className="card border-0 shadow-sm h-100 hover-lift">
         <div className="card-body p-4">
@@ -199,7 +153,7 @@ function Assessment() {
         </div>
       </div>
     </div>
-  ))}
+  ))} */}
 
 
 

@@ -296,7 +296,6 @@ export interface Sparam{
 
 export interface Sparamc{
   department:string;
-  
   level:string;
 }
 
@@ -414,12 +413,12 @@ export const formatLocalTime = (isoString: string): string => {
 };
 
 
-// export const formatLocalDate = (isoString: string): string => {
-//   const date = new Date(isoString);
-//   return date.toISOString().split("T")[0];//→"2025-10-18"
-// };
+export const formatLocalDates = (isoString: string): string => {
+  const date = new Date(isoString);
+  return date.toISOString().split("T")[0];//→"2025-10-18"
+};
 
-// export const formatLocalDate = (isoString: string): string => {
+// export const formatLocalDates = (isoString: string): string => {
 //   const date = new Date(isoString);
 //   const yyyy = date.getFullYear();
 //   const mm = String(date.getMonth() + 1).padStart(2, "0");
@@ -432,21 +431,16 @@ export const formatLocalTime = (isoString: string): string => {
 
 export const formatLocalDate = (isoString: string): string => {
   const date = new Date(isoString);
-
   const yyyy = date.getFullYear();
   const mm = String(date.getMonth() + 1).padStart(2, "0");
   const dd = String(date.getDate()).padStart(2, "0");
-
   let hours = date.getHours();
   const ampm = hours >= 12 ? "PM" : "AM";
-
   // Convert to 12-hour format
   hours = hours % 12 || 12;
-
   const hh = String(hours).padStart(2, "0");
   const min = String(date.getMinutes()).padStart(2, "0");
   const ss = String(date.getSeconds()).padStart(2, "0");
-
   return `${yyyy}-${mm}-${dd} ${hh}:${min}:${ss} ${ampm}`;
 };
 
@@ -506,6 +500,15 @@ export interface Assess {
   deadline: string;     // or Date if parsed
   total_marks: number;
 }
+
+export interface QuizAssess{
+   quiz_title:string;
+   totalq:string;
+   course_name:string;
+   deadline:string;   // ISO datetime string
+   duration:string;
+}
+
 
 
 

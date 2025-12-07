@@ -18,7 +18,7 @@ function Loginc() {
   const[respo,setRespo]=useState();
   const[relogin,setLogrespo]=useState();
   const Navi=useNavigate();
-  
+  const [ema,sendotps]=useState({email:''});
    if(respo=='Logged in successfully'){
        Navi("main/Dashboard");         
     }
@@ -80,6 +80,37 @@ function Loginc() {
     return Object.keys(errordata).length==0
 
   }
+
+const sendOTP = async (data: any) => {
+  if (!data.email) {
+    alert("Please enter an email");
+    return;
+  }
+  //Simple email format validation
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!regex.test(data.email)) {
+    alert("Invalid email format");
+    return;
+  }
+
+   try {
+    const res=await api.post("/send-otp",{
+      email:data.email,
+    });
+
+    if (res.data.success) {
+      alert("OTP sent successfully to " + data.email);
+      setOtpSent(true); // show OTP input
+    } else {
+      alert("Failed to send OTP: " + res.data.message);
+    }
+  } catch (err: any) {
+    console.error(err);
+    alert("Error sending OTP");
+  }
+};
+
+
 useEffect(() => {
     const fetchDepartments = async()=>{
       //etIsLoading(true);
@@ -150,7 +181,6 @@ useEffect(() => {
                                 api.post("/login",logindata).
                                 then((data)=>
                                 {
-                                
                                 const{message,user}=data.data;
                                 const loginsession={message,user};
                                 localStorage.clear();
@@ -159,14 +189,13 @@ useEffect(() => {
                                // console.log(loginsession);
                                 setRespo(data.data.message);
                                 }
-                                
                                 ).
                                 catch(err=>setRespo(err.message)).finally(()=>setLoading(false));
                                 setLoading(false)
                          }
                         }}>
                           <div className="mb-3">
-                                   <label  className="form-label">
+                            <label  className="form-label">
                                    Student/Lecturer Number
                                        </label>
                                    <input type="text" value={logindata.studentnumber} onChange={(e)=>setLogindata((prev)=>({...prev,studentnumber:e.target.value}))} className="form-control" id="username" placeholder="Enter Student/Lecturer number"/>
@@ -296,9 +325,9 @@ useEffect(() => {
                                     </div>
                                      ):''
                                      }
-                                       <div className="mb-2">
-                                           <label  className="form-label">Email</label>
-                                           <input onChange={(e)=>setAccount((prev)=>({...prev,email:e.target.value}))} type="text" className="form-control" id="username" placeholder="Enter email"/>
+                                    <div className="mb-2">
+                                        <label  className="form-label">Email</label>
+                                        <input onChange={(e)=>setAccount((prev)=>({...prev,email:e.target.value}))} type="text" className="form-control" id="username" placeholder="Enter email"/>
                                               {erraccount?.email && (
                                     <span className="text-danger text-sm">{erraccount?.email}</span>
                                    )}
@@ -310,20 +339,26 @@ useEffect(() => {
                                           <span className="text-danger text-sm">{erraccount?.tel}</span>
                                        )}
                                        </div>
-                                       <div className="mb-2">
-                                 <label  className="form-label">Select Department</label>
-                                  <select id="exampleSelect" onChange={(e)=>setAccount((prev)=>({...prev,department:e.target.value}))} className="form-select">
+                                <div className="mb-2">
+                                   <label  className="form-label">Select Department</label>
+                                    <select id="exampleSelect" onChange={(e)=>setAccount((prev)=>({...prev,department:e.target.value}))} className="form-select">
                                     <option >Select department</option>
-                                    {
-                                   department.map((dept)=>(
+                                      {
+                                        department.map((dept)=>(
                                         <option value={dept.department_id}>{dept.department_name}</option>
-                                    ))
-                                   }
+                                      ))
+                                     }
                                    </select>
                                       {erraccount?.department && (
                                     <span className="text-danger text-sm">{erraccount?.department}</span>
                                    )}
                                    </div>
+
+                                   <div className="mb-2">
+                                        <label  className="form-label">EmailTest</label>
+                                        <input  type="text" className="form-control" id="username" onChange={(e)=>sendotps((prev)=>({...prev,email:e.target.value}))} placeholder="Enter email"/>
+                                        <button className='btn btn-primary mt-2' onClick={()=>sendOTP(ema)} >SendOTP</button>
+                                       </div>
                                    </div>
                                </div>
                                <div className="d-flex justify-content-between mt-2">
@@ -348,3 +383,7 @@ useEffect(() => {
 
 
 export default Loginc
+function setOtpSent(arg0: boolean) {
+  throw new Error('Function not implemented.');
+}
+
