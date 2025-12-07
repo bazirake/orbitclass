@@ -69,46 +69,45 @@ function Loginc() {
   const errordata:Loginerror={}
     if((logindata.studentnumber=='' ||logindata.studentnumber==null)) {
       errordata.errornumber="Please Enter Student number"
-    }
+     }
     if(logindata.password=='' ||logindata.password=="") {
       errordata.errorpass="Please Enter student number"
-    }
+     }
       if ((logindata.studentnumber.length!=7)) {
-    errordata.errornumber="length of student number should be 7"
+      errordata.errornumber="length of student number should be 7"
     } 
      setErrorLogin(errordata);
     return Object.keys(errordata).length==0
-
   }
 
-const sendOTP = async (data: any) => {
-  if (!data.email) {
-    alert("Please enter an email");
-    return;
-  }
-  //Simple email format validation
-  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!regex.test(data.email)) {
-    alert("Invalid email format");
-    return;
-  }
+// const sendOTP = async (data: any) => {
+//   if (!data.email) {
+//     alert("Please enter an email");
+//     return;
+//   }
+//   //Simple email format validation
+//   const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+//   if (!regex.test(data.email)) {
+//     alert("Invalid email format");
+//     return;
+//   }
 
-   try {
-    const res=await api.post("/send-otp",{
-      email:data.email,
-    });
+//    try {
+//     const res=await api.post("/send-otp",{
+//       email:data.email,
+//     });
 
-    if (res.data.success) {
-      alert("OTP sent successfully to " + data.email);
-      setOtpSent(true); // show OTP input
-    } else {
-      alert("Failed to send OTP: " + res.data.message);
-    }
-  } catch (err: any) {
-    console.error(err);
-    alert("Error sending OTP");
-  }
-};
+//     if (res.data.success) {
+//       alert("OTP sent successfully to " + data.email);
+//       setOtpSent(true); // show OTP input
+//     } else {
+//       alert("Failed to send OTP: " + res.data.message);
+//     }
+//   } catch (err: any) {
+//     console.error(err);
+//     alert("Error sending OTP");
+//   }
+// };
 
 
 useEffect(() => {
@@ -354,11 +353,11 @@ useEffect(() => {
                                    )}
                                    </div>
 
-                                   <div className="mb-2">
+                                   {/* <div className="mb-2">
                                         <label  className="form-label">EmailTest</label>
                                         <input  type="text" className="form-control" id="username" onChange={(e)=>sendotps((prev)=>({...prev,email:e.target.value}))} placeholder="Enter email"/>
                                         <button className='btn btn-primary mt-2' onClick={()=>sendOTP(ema)} >SendOTP</button>
-                                       </div>
+                                       </div> */}
                                    </div>
                                </div>
                                <div className="d-flex justify-content-between mt-2">

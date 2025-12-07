@@ -509,8 +509,21 @@ export interface QuizAssess{
    duration:string;
 }
 
+ export interface Subject {
+    deadline:string;
+    quiz_id:number;
+    quiz_title:string;
+    course: string;
+    max_marks: number;
+    obtained_marks: number;
+    overall_percentage: number;
+    overall_grade: string;
+    remark: string;
+}
 
-
+ export interface SubjectsResponse {
+   subjects: Subject[];
+ }
 
 
 

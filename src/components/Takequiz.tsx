@@ -12,11 +12,11 @@ function Takequiz() {
   const userinfo = JSON.parse(localStorage.getItem('auth')!);
   const { takequizReport } = useNotify();
 
-  useEffect(() => {
+  useEffect(()=>{
     takequizReport('takequiz');
     fetchQuizt();
     fetchQuiz();
-  }, []);
+  },[]);
 
   const fetchQuiz = async () => {
     try {
@@ -34,7 +34,6 @@ function Takequiz() {
       const response = await api.get<Quizt>(
         `/api/quiz/latest/?deptid=${userinfo.user.department_id}&level_id=${userinfo.user.level_id}`
       );
-
       const quizData = {
         ...response.data,
         deadline:formatLocalDate(response.data.deadline) // formatted with AM/PM
@@ -53,12 +52,8 @@ function Takequiz() {
   // Check if quiz is still active (deadline > current date-time)
   const isQuizActive = (deadline: string | undefined): boolean => {
     if (!deadline) return false;
-
-   
     const deadlineDate = new Date(deadline.replace(/-/g, '/')); 
-  
     const now = new Date();
-
     return deadlineDate.getTime() > now.getTime();
   };
 
@@ -112,15 +107,14 @@ function Takequiz() {
                     <strong>Note:</strong> Once you start the quiz, the timer will begin, and you cannot pause it.
                   </div>
                   <div className="d-flex align-items-center justify-content-center">
-                    <button
+                  <button
                       type="button"
                       className="btn btn-primary"
-                      onClick={() =>
-                        startQuiz(userinfo.user.department_id, userinfo.user.level_id)
+                      onClick={()=>startQuiz(userinfo.user.department_id,userinfo.user.level_id)
                       }
                     >
                       Start Quiz
-                    </button>
+                  </button>
                   </div>
                 </>
               ) : (

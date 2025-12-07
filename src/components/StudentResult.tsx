@@ -93,17 +93,16 @@ import { error } from 'console';
       }}>
      <fieldset className="border border-primary rounded p-3">
      <legend className="float-none w-auto px-2">Filter</legend>
-        
          <div className="filter-container mb-4">
              <div className="row g-3">
                  <div className="col-md-3">
                      <label  className="form-label">Department:</label>
                      <select className="form-select" id="deptFilter" onChange={(e)=>setPara((prev)=>({...prev,department:e.target.value}))}>
-                         <option value="">All Departments</option>
+                        <option value="">All Departments</option>
                           {
-                           department.map((item)=>
-                           <option value={item.department_id}>{item.department_name}</option>
-                            )
+                            department.map((item)=>
+                        <option value={item.department_id}>{item.department_name}</option>
+                          )
                           }
                      </select>
                  </div>
